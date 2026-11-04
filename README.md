@@ -3,7 +3,7 @@
 [![CI](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/code-MIT-2ea44f)](LICENSE)
 
-<p align="center"><img src="site/assets/brand/tehealp-lockup-horizontal.png" width="280" alt="TeHealP horizontal lockup"></p>
+<p align="center"><img src="site/assets/brand/tehealp-logo.png" width="280" alt="TeHealP logo"></p>
 
 A Python library and command-line tool for lower-limb pose processing and kicking kinematics. It implements the reusable stages described in *Implementación y validación de algoritmos de inteligencia artificial para analizar la asimetría en el movimiento del pateo en futsal*: homologation of four functional landmarks, multi-camera DLT, temporal processing, 3D velocities, sagittal knee and ankle angles, bilateral metrics, and analysis exports.
 

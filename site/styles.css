@@ -126,8 +126,8 @@ pre code { color: inherit; white-space: pre; }
 .footer { display: flex; justify-content: space-between; gap: 20px; padding: 27px 0 35px; color: var(--muted-2); font-size: 11px; }
 .footer-links { display: flex; gap: 18px; }
 .footer-brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.tehealp-logo-crop { display: block; position: relative; width: 220px; height: 56px; overflow: hidden; border-radius: 8px; background: #fff; }
-.tehealp-logo-crop img { display: block; width: 100%; height: auto; margin-top: -40px; }
+.tehealp-logo { display: block; width: 220px; height: 56px; }
+.tehealp-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .footer a { text-decoration: none; }
 button, a { outline-offset: 4px; }
 :focus-visible { outline: 2px solid var(--amber); }
