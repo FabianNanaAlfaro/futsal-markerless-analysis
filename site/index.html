@@ -3,24 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Explorador interactivo del pipeline de tesis Sports2D, DVIDEOW, MediaPipe y DeepLabCut.">
+  <meta name="description" content="Python package for markerless pose analysis, camera-calibrated 3D reconstruction and futsal-kicking kinematics.">
   <meta name="theme-color" content="#08111f">
-  <title>Sports2D × DVIDEOW · Thesis pipeline</title>
+  <title>Sports2D × DVIDEOW · Scientific pipeline</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#explorer">Saltar al explorador</a>
+  <a class="skip-link" href="#explorer">Saltar al pipeline</a>
 
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Inicio del pipeline">
       <span class="brand-mark" aria-hidden="true">S<span>2</span>D</span>
-      <span>thesis pipeline</span>
+      <span>scientific pipeline</span>
     </a>
     <nav aria-label="Navegación principal">
-      <a href="#explorer">Pipeline</a>
-      <a href="#models">Modelos</a>
-      <a href="#perimeter">Frontera pública</a>
-      <a href="#evidence">Evidencia</a>
+      <a href="#explorer">Workflow</a>
+      <a href="#models">DLC models</a>
+      <a href="#perimeter">Inputs and licenses</a>
       <a class="nav-github" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline">GitHub ↗</a>
     </nav>
   </header>
@@ -28,104 +27,105 @@
   <main id="top">
     <section class="hero shell" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="pulse"></span> PUBLIC RESEARCH COMPANION · v0.1.0</p>
-        <h1 id="hero-title">Del video al análisis biomecánico, con cada decisión a la vista.</h1>
-        <p class="hero-lead">Una guía visual e interactiva de la tesis sobre análisis markerless del pateo en futsal: referencia manual DVIDEOW, Sports2D, MediaPipe, DeepLabCut, reconstrucción DLT y validación.</p>
+        <p class="eyebrow"><span class="pulse"></span> PYTHON PACKAGE · v0.2.0</p>
+        <h1 id="hero-title">From synchronized video to lower-limb kinematics.</h1>
+        <p class="hero-lead">Installable Python tools for markerless pose estimation, two-camera DLT reconstruction, temporal processing and futsal-kicking analysis, based on the thesis methods.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#explorer">Explorar el pipeline <span aria-hidden="true">↓</span></a>
-          <a class="button ghost" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline">Ver repositorio <span aria-hidden="true">↗</span></a>
+          <a class="button primary" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline#installation">Install and run <span aria-hidden="true">↗</span></a>
+          <a class="button ghost" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline">Source code <span aria-hidden="true">↗</span></a>
         </div>
       </div>
       <div class="hero-art" aria-label="Diagrama resumido del flujo de investigación">
         <div class="art-glow"></div>
-        <img src="assets/pipeline-overview.svg" alt="Flujo desde la pregunta de investigación hasta la liberación pública" width="760" height="560">
+        <img src="assets/pipeline-overview.svg" alt="Pose estimation, landmark mapping, DLT reconstruction, kinematics and validation" width="760" height="560">
       </div>
     </section>
 
     <section class="stat-strip shell" aria-label="Resumen del proyecto">
-      <div><strong>2D → 3D</strong><span>funnel común</span></div>
-      <div><strong>4 rutas</strong><span>manual + markerless</span></div>
-      <div><strong>240 Hz</strong><span>contexto experimental</span></div>
-      <div><strong>0 datos</strong><span>participantes no publicados</span></div>
+      <div><strong>2D → 3D</strong><span>multi-camera workflow</span></div>
+      <div><strong>4 routes</strong><span>reference + markerless</span></div>
+      <div><strong>5 DLC</strong><span>trained models</span></div>
+      <div><strong>240 Hz</strong><span>study acquisition</span></div>
     </section>
 
     <section id="explorer" class="section shell" aria-labelledby="explorer-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">01 · EXPLORER</p>
-          <h2 id="explorer-title">El pipeline, etapa por etapa.</h2>
+          <p class="eyebrow">01 · WORKFLOW</p>
+          <h2 id="explorer-title">Processing stages.</h2>
         </div>
-        <p class="section-note">Selecciona una tarjeta. Aquí se explica el método; los datos y resultados permanecen fuera.</p>
+        <p class="section-note">Select a stage to see its inputs, outputs and related documentation.</p>
       </div>
       <div class="explorer-layout">
-        <div id="stage-list" class="stage-list" role="list" aria-label="Etapas del pipeline"></div>
+        <div id="stage-list" class="stage-list" role="list" aria-label="Pipeline stages"></div>
         <article id="stage-detail" class="stage-detail" aria-live="polite"></article>
       </div>
-      <noscript><p class="noscript">Activa JavaScript para abrir las tarjetas interactivas. La documentación completa está en <a href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/tree/main/docs">/docs</a>.</p></noscript>
+      <noscript><p class="noscript">The full documentation is available in the <a href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/tree/main/docs">docs folder</a>.</p></noscript>
     </section>
 
     <section id="models" class="section shell" aria-labelledby="models-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">02 · MODEL CARDS</p>
-          <h2 id="models-title">Aquí sí hay código.</h2>
+          <p class="eyebrow">02 · POSE SYSTEMS</p>
+          <h2 id="models-title">Use the trained models.</h2>
         </div>
-        <p class="section-note">Modelos upstream, configuración declarada y adaptadores listos para una rerun autorizada.</p>
+        <p class="section-note">Run the five thesis-trained DeepLabCut configurations or use Sports2D and MediaPipe for new videos.</p>
       </div>
       <div class="model-layout">
         <figure class="model-figure">
           <img src="assets/halpe-26-keypoints.svg" alt="Esquema original de los 26 puntos corporales Halpe-26" width="1080" height="680">
-          <figcaption>Esquema vectorial original del contrato <code>Body_with_feet</code>. No es una imagen de resultados.</figcaption>
+          <figcaption>Halpe-26 lower-limb and whole-body keypoint scheme used by the Sports2D body-with-feet model.</figcaption>
         </figure>
         <div class="model-copy">
           <p class="eyebrow">SPORTS2D / HALPE-26</p>
-          <h3>La ruta markerless empieza con una configuración reproducible.</h3>
-          <p>El nombre correcto del proyecto es <strong>Sports2D</strong> y su autor público es David Pagnon. La plantilla de este repo usa <code>Body_with_feet</code> / Halpe-26, deja la salida en píxeles y entrega el control a la homologación y al DLT común.</p>
-          <pre><code>python src/run_sports2d.py \
-  --video $env:THESIS_PRIVATE_ROOT\videos\trial.mp4 \
-  --output-dir $env:THESIS_PRIVATE_ROOT\runs\sports2d \
-  --print-config</code></pre>
-          <p class="code-note">El comando es dry-run por defecto. Añade <code>--execute --keep-config</code> únicamente en tu entorno privado.</p>
+          <h3>Run 2D pose estimation on a camera view.</h3>
+          <p>The thesis route used the <code>Body_with_feet</code> / Halpe-26 pose model, greatest-displacement person ordering and DeepSORT tracking. The 2D results can be mapped to the common landmark schema before multi-camera reconstruction.</p>
+          <pre><code>sports2d-dvideow pose-sports2d \
+  --video camera-1.mp4 \
+  --config study-camera-1.toml \
+  --output pose-output</code></pre>
+          <p class="code-note">See the Sports2D method notes for settings that the thesis did not report.</p>
           <div class="source-links"><a href="https://github.com/davidpagnon/Sports2D">Sports2D ↗</a><a href="https://doi.org/10.21105/joss.06849">Pagnon &amp; Kim · JOSS ↗</a><a href="https://github.com/Fang-Haoshu/Halpe-FullBody">Halpe-FullBody ↗</a></div>
         </div>
       </div>
       <div class="benchmark-strip">
         <div><span class="benchmark-label">DLC BENCHMARK</span><strong>5 configuraciones</strong><span>RTMPose-S · RTMPose-M · RTMPose-X · HRNet-W48 · ResNet-101</span></div>
-        <a class="button ghost" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/docs/deeplabcut-benchmark.md">Ver protocolo DLC ↗</a>
+        <a class="button ghost" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/docs/deeplabcut-benchmark.md">Download models and metadata ↗</a>
       </div>
       <div class="command-grid" aria-label="Kit de comandos del pipeline">
         <article class="command-card">
           <span class="command-index">01 · 2D</span>
           <h3>MediaPipe + ROI</h3>
           <p>Recorta por cámara, devuelve a píxeles originales y deja la visibilidad explícita.</p>
-          <pre><code>python src/run_mediapipe.py \
-  --video path\to\private\trial.avi \
-  --camera-role CAM_1 \
+          <pre><code>sports2d-dvideow pose-mediapipe \
+  --video camera-1.mp4 --side right \
+  --camera CAM_1 \
   --roi-config configs/mediapipe.roi.example.json</code></pre>
         </article>
         <article class="command-card">
           <span class="command-index">02 · BENCH</span>
           <h3>DeepLabCut</h3>
-          <p>Planifica las cinco configuraciones y ejecuta análisis autorizado sin publicar pesos.</p>
-          <pre><code>python src/run_dlc.py \
-  --action analyze \
-  --config-yaml path\to\private\config.yaml \
-  --output-dir path\to\private\runs\dlc</code></pre>
+          <p>Choose one of the five released checkpoints and export canonical 2D tracks.</p>
+          <pre><code>sports2d-dvideow pose-dlc \
+  --model ResNet-101 --model-bundle models\ResNet-101 \
+  --video camera-1.mp4 --camera CAM_1 --output predictions</code></pre>
         </article>
         <article class="command-card">
           <span class="command-index">03 · 3D</span>
           <h3>DLT + quality gate</h3>
-          <p>Triangula una secuencia, calcula reproyección y conserva frames inválidos con razón.</p>
-          <pre><code>python src/reconstruct_json.py \
-  examples/dlt-trajectory.example.json \
-  --max-reprojection-px 5</code></pre>
+          <p>Combine synchronized pixel tracks with the investigator's camera calibration.</p>
+          <pre><code>sports2d-dvideow run \
+  --tracks paired_tracks.csv --calibration calibration.json \
+  --side right --impact-frame 240 --window-start-frame 180 \
+  --output trial-output</code></pre>
         </article>
         <article class="command-card">
           <span class="command-index">04 · DERIVED</span>
           <h3>Cinemática</h3>
-          <p>Normaliza la ventana y deriva velocidad, rapidez y ángulos desde el contrato 3D.</p>
-          <pre><code>python src/derive_biomechanics.py \
-  examples/biomechanics-input.example.json</code></pre>
+          <p>Export 3D positions, speeds, sagittal joint angles and a 101-point phase curve.</p>
+          <pre><code>sports2d-dvideow bilateral \
+  --dominant right.csv --non-dominant left.csv \
+  --output bilateral.csv</code></pre>
         </article>
       </div>
     </section>
@@ -134,30 +134,30 @@
       <div class="shell">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">03 · RELEASE DESIGN</p>
-            <h2 id="perimeter-title">Lo público termina antes de la observación humana.</h2>
+            <p class="eyebrow">03 · INPUTS AND LICENSES</p>
+            <h2 id="perimeter-title">Bring study videos and calibrations.</h2>
           </div>
-          <p class="section-note">El repositorio comparte contratos y criterio, no la base que los alimenta.</p>
+          <p class="section-note">The package accepts new synchronized videos, 2D tracks and camera calibrations.</p>
         </div>
         <div class="perimeter-grid">
           <div class="perimeter-card included">
             <div class="card-icon">＋</div>
-            <h3>Sí entra</h3>
+            <h3>Included</h3>
             <ul>
-              <li>Pipeline completo y decisiones metodológicas</li>
-              <li>Manifiesto sintético y validadores ejecutables</li>
-              <li>Diagramas de proceso, colaboradores y fuentes públicas</li>
-              <li>DOI asignado y certificado de presentación</li>
+              <li>Installable Python package and command-line tool</li>
+              <li>Five selected pose models and shared detector</li>
+              <li>Portable model settings and checkpoint hashes</li>
+              <li>Synthetic end-to-end example and tests</li>
             </ul>
           </div>
           <div class="perimeter-card excluded">
             <div class="card-icon">−</div>
-            <h3>No entra</h3>
+            <h3>Supplied by each study</h3>
             <ul>
-              <li>Base de datos, videos, coordenadas y calibraciones</li>
-              <li>Software ejecutable, pesos, snapshots y cachés</li>
-              <li>Tablas, gráficos o imágenes de resultados</li>
-              <li>Proof de revista y documento de tesis</li>
+              <li>Study videos and synchronized 2D observations</li>
+              <li>Camera calibration matrices or DLT coefficients</li>
+              <li>Impact frame and kicking-side labels</li>
+              <li>New annotations for fine-tuning</li>
             </ul>
           </div>
         </div>
@@ -167,24 +167,24 @@
     <section id="evidence" class="section shell" aria-labelledby="evidence-title">
       <div class="evidence-layout">
         <div>
-          <p class="eyebrow">04 · EVIDENCE</p>
-          <h2 id="evidence-title">La historia tiene rastro.</h2>
-          <p>El trabajo preliminar internacional se identifica con un DOI asignado, marcado aquí como <strong>en producción</strong>. El certificado oral de ISBS 2026 se conserva como evidencia documental; el proof no se publica.</p>
+          <p class="eyebrow">04 · REFERENCES</p>
+          <h2 id="evidence-title">Scientific and software references.</h2>
+          <p>Use the thesis for the experimental procedure and cite the original pose-estimation tools together with this package.</p>
           <div class="evidence-actions">
-            <a class="button primary" href="evidence/ISBS2026_oral_certificate.pdf">Abrir certificado PDF ↗</a>
-            <a class="text-link" href="https://doi.org/10.1080/14763141.2026.2680520">10.1080/14763141.2026.2680520 ↗</a>
+            <a class="button primary" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/docs/sources.md">View citations ↗</a>
+            <a class="text-link" href="https://doi.org/10.21105/joss.06849">Sports2D · JOSS ↗</a>
           </div>
         </div>
         <div class="evidence-stamp" aria-label="Certificado de presentación incluido">
-          <span class="stamp-ring">ISBS<br><b>2026</b></span>
-          <span class="stamp-label">ORAL<br>PRESENTATION</span>
+          <span class="stamp-ring">DLC<br><b>×5</b></span>
+          <span class="stamp-label">MODEL<br>CHECKPOINTS</span>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer shell">
-    <div><span class="brand-mark small" aria-hidden="true">S<span>2</span>D</span> <span>Fabian A. Nana · public methodological companion</span></div>
+    <div><span class="brand-mark small" aria-hidden="true">S<span>2</span>D</span> <span>Sports2D–DVIDEOW thesis pipeline · Python package</span></div>
     <div class="footer-links"><a href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/docs/contributors.md">Contributors</a><a href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/docs/data-boundary.md">Data boundary</a><a href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/CITATION.cff">Cite</a></div>
   </footer>
   <script src="app.js" defer></script>

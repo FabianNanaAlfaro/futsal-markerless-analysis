@@ -1,22 +1,21 @@
-# Public sources and verification notes
+# Scientific and software references
 
-This page records the public sources used to identify people, institutions, event context and related work. The thesis working directory and the journal proof were used as project-owner supplied evidence during preparation, but neither is distributed in this repository.
+## Thesis method
 
-| Claim | Public source |
-| --- | --- |
-| Luiz H. Palucci Vieira's PUCP bio, degree history and bioengineering role | [PUCP official profile](https://www.pucp.edu.pe/profesor/luiz-palucci-vieira) |
-| Paulo R. P. Santiago's USP position and training | [USP EEFER Ribeirão Preto profile](https://dcd.fmrp.usp.br/corpo-docente/paulo-santiago/) |
-| Bruno L. S. Bedo's USP role and research areas | [EEFE-USP faculty profile](https://www.eefe.usp.br/node/1766?q=node%2F1508) |
-| Rodrigo Aquino's UFES faculty status | [UFES PPGEF faculty list](https://educacaofisica.ufes.br/pt-br/pos-graduacao/PPGEF/lista-de-docentes) |
-| ISBS 2026 event context | [Official ISBS 2026 page](https://isbs.org/conferences/conferences/29-isbs2026) |
-| Fabian A. Nana identity record | [ORCID 0009-0000-7881-1223](https://orcid.org/0009-0000-7881-1223) |
-| Sports2D method | [JOSS DOI 10.21105/joss.06849](https://doi.org/10.21105/joss.06849) |
-| Sports2D official implementation and command surface | [David Pagnon's official Sports2D repository](https://github.com/davidpagnon/Sports2D) and [public demo configuration](https://github.com/davidpagnon/Sports2D/blob/main/Sports2D/Demo/Config_demo.toml) |
-| Halpe-26 body-keypoint names used by the `Body_with_feet` route | [Halpe-FullBody keypoint definition](https://github.com/Fang-Haoshu/Halpe-FullBody) and [AlphaPose Halpe-26 mapping](https://github.com/MVIG-SJTU/AlphaPose/blob/master/alphapose/datasets/halpe_26.py) |
-| DeepLabCut implementation and foundational method | [DeepLabCut official repository](https://github.com/DeepLabCut/DeepLabCut) and [Mathis et al. (2018)](https://doi.org/10.1038/s41593-018-0209-y) |
-| MediaPipe Pose legacy detector/tracker parameters | [MediaPipe Pose documentation](https://mediapipe.readthedocs.io/en/latest/solutions/pose.html) |
-| Assigned preliminary-work DOI | [DOI 10.1080/14763141.2026.2680520](https://doi.org/10.1080/14763141.2026.2680520) |
+The implementation follows the methods, axes, temporal processing, model benchmark and outcome definitions in *Implementación y validación de algoritmos de inteligencia artificial para analizar la asimetría en el movimiento del pateo en futsal*. The thesis remains the authoritative description of the experiment; this repository provides code and reusable model artifacts for its computational stages.
 
-## Naming note
+## Pose-estimation systems
 
-The project materials use both `Fabian A. Nana` and `Fabian Alcides Ñaña Alfaro` as publication/name variants. The repository keeps the international publication form where it refers to that work and the full thesis form where it refers to the thesis. This avoids silently merging identities or borrowing the ORCID of another collaborator.
+- Pagnon D, Kim H. Sports2D: pose-based biomechanical analysis from video. *Journal of Open Source Software*. 2024. [doi:10.21105/joss.06849](https://doi.org/10.21105/joss.06849). See also the [official Sports2D source](https://github.com/davidpagnon/Sports2D).
+- Mathis A, et al. DeepLabCut: markerless pose estimation of user-defined body parts with deep learning. *Nature Neuroscience*. 2018. [doi:10.1038/s41593-018-0209-y](https://doi.org/10.1038/s41593-018-0209-y). See the [official DeepLabCut source](https://github.com/DeepLabCut/DeepLabCut).
+- Nath T, et al. Using DeepLabCut for 3D markerless pose estimation across species and behaviors. *Nature Protocols*. 2019. [doi:10.1038/s41596-019-0176-0](https://doi.org/10.1038/s41596-019-0176-0).
+- Lugaresi C, et al. MediaPipe: a framework for building perception pipelines. 2019. [arXiv:1906.08172](https://arxiv.org/abs/1906.08172). See the [MediaPipe Pose documentation](https://mediapipe.readthedocs.io/en/latest/solutions/pose.html).
+
+## Statistical methods
+
+- SPM1D API and inference documentation: [spm1d.org](https://spm1d.org/doc/).
+- Bland–Altman agreement limits use the original paired-measurement framework; confidence intervals in this package resample participant clusters to retain within-participant trials.
+
+## Related publication
+
+The preliminary-work record associated with this research is [doi:10.1080/14763141.2026.2680520](https://doi.org/10.1080/14763141.2026.2680520). Cite that publication and the thesis separately where both informed a study.

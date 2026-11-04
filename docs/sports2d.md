@@ -1,55 +1,29 @@
-# Sports2D model card and application
+# Sports2D
 
-## Nomenclature and attribution
+In the thesis workflow, Sports2D supplies a 2D pose route based on YOLOX and the Halpe-26 body-with-feet model. Candidate selection used greatest displacement and the selected person was tracked with DeepSORT. When tracking was unusable, a separate rerun used manual target selection.
 
-The tool is **Sports2D**, not “Sparse2D”. Its official public repository is [davidpagnon/Sports2D](https://github.com/davidpagnon/Sports2D), maintained by David Pagnon. The software paper is by David Pagnon and HunMin Kim: [Pagnon & Kim (2024), DOI 10.21105/joss.06849](https://doi.org/10.21105/joss.06849).
+The thesis does not report all package-specific thresholds or the DeepSORT appearance embedder, inference backend or device. The checked-in TOML provides an executable starting point for Sports2D 0.8.20. The executable example uses the bundled MobileNet embedder, CPU inference and ONNX Runtime. These are software configuration choices, not thesis-reported settings. The CPU-tested pair is PyTorch 2.5.1 and torchvision 0.20.1; a CUDA installation needs compatible builds of both. The TOML only records options supported by Sports2D 0.8.20. Unreported values are inherited from that version's default configuration.
 
-The name sometimes remembered as “David Packard” is not the author identity used by the official repository or paper; this repository keeps the verifiable citation **David Pagnon**.
+## Run a view
 
-## What this thesis uses
-
-The thesis route uses the official `Body_with_feet` model family, whose upstream configuration describes the default body model as **HALPE_26**. The route is kept in 2D pixel space so the four functional points can be homologated and reconstructed later with the common two-camera DLT contract.
-
-```text
-video view
-  → Sports2D / RTMPose + YOLOX / Body_with_feet (Halpe-26)
-  → one-person selection + tracking
-  → pixel-space pose export
-  → common hip/knee/ankle/foot adapter
-  → two-camera DLT
-```
-
-This is why the repository does not use a single-view meters conversion as the thesis' 3D result. The route-specific detector is allowed to be different; the geometry and downstream comparison contract are not.
-
-## Reproduce the route with the checked-in wrapper
+In a new environment, install the tested CPU PyTorch pair and the optional package extra. For a CUDA run, select matching PyTorch and torchvision wheels from the official PyTorch selector. Edit a copy of [`sports2d.thesis.toml`](../configs/sports2d.thesis.toml) for the camera and study. Its `visible_side` setting describes the view orientation; the CLI `--side` argument selects the anatomical side written to the common tracks. Then run:
 
 ```powershell
-python src/run_sports2d.py `
-  --video $env:THESIS_PRIVATE_ROOT\videos\trial.mp4 `
-  --output-dir $env:THESIS_PRIVATE_ROOT\runs\sports2d `
-  --print-config
+python -m pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install ".[sports2d]"
+sports2d-dvideow pose-sports2d `
+  --video .\study\camera-1.mp4 `
+  --config .\config\sports2d-camera-1.toml `
+  --side right --camera CAM_1 `
+  --output .\pose-output\camera-1
 ```
 
-The public template records the important settings used in the thesis route:
+The adapter calls Sports2D's Python API, retains its native TRC and angle exports, and writes `<video>_tracks_2d.csv` in the common schema. The CSV contains image-pixel coordinates, original frame indices, camera label, source landmark names and blank confidence values because Sports2D TRC exports do not include per-point likelihoods. Use a new or empty output directory. Supply each synchronized camera view separately, with its camera label and selected anatomical side, before DLT reconstruction. Use two synchronized camera views and researcher-supplied calibration for 3D reconstruction; a single-view Sports2D scale estimate is a separate output.
 
-| Setting | Public value | Why |
-| --- | --- | --- |
-| Pose model | `Body_with_feet` / Halpe-26 | Includes feet and maps to the lower-limb contract. |
-| Mode | `balanced` | Matches the declared RTMPose/YOLOX route family. |
-| Persons | `1` | Keeps the selected subject explicit. |
-| Ordering | `greatest_displacement` | Declared subject-selection heuristic. |
-| Detection frequency | `1` | Detector is run on every frame. |
-| Keypoint threshold | `0.30` | Low-confidence points are not silently accepted. |
-| Average threshold | `0.40` | Person-level confidence gate. |
-| Keypoint-number threshold | `0.60` | Completeness gate. |
-| Tracking | `sports2d` / `keypoints` | Route-specific tracking, not a hidden manual correction. |
-| Post-processing | largest section; reject outliers; interpolate gaps `< 6` frames; larger gaps `NaN` | Matches the closed 2D export contract. |
-| Internal filter | off | The thesis curation/filtering stage is explicit downstream. |
-| Saving | pose/angles on; video/images off | Keeps the method output useful without creating presentation artifacts. |
-| Meters conversion | off | Common DLT is applied after homologation. |
+Sports2D can filter or interpolate its own 2D output. Record those settings and avoid applying them twice without checking their effect. The shared markerless 2D curation in this package is a separate downstream operation.
 
-The command is intentionally dry-run by default. Add `--execute` only in a private environment and use `--keep-config` if the generated configuration should be retained with the private provenance record.
+## Sources
 
-## Upstream limitations retained
-
-Sports2D is a 2D pose/angle tool. The upstream paper notes that 2D methods are appropriate when the analyzed motion is sufficiently represented in a sagittal or frontal plane; the thesis therefore treats Sports2D's 2D output and the independent two-view 3D reconstruction as separate validation questions. See the [upstream paper](https://joss.theoj.org/papers/10.21105/joss.06849) and this project's [limitations](limitations.md).
+- [Sports2D source code and configuration](https://github.com/davidpagnon/Sports2D)
+- [Pagnon and Kim (2024), Journal of Open Source Software](https://doi.org/10.21105/joss.06849)
+- [HALPE-FullBody keypoint definition](https://github.com/Fang-Haoshu/Halpe-FullBody)

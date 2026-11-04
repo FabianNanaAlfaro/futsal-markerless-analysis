@@ -1,4 +1,4 @@
-name: Public release checks
+name: Scientific Python package checks
 
 on:
   push:
@@ -12,21 +12,30 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - name: Install public numerical dependencies
-        run: python -m pip install -r requirements.txt
+          python-version: ${{ matrix.python-version }}
+      - name: Install the package
+        run: python -m pip install ".[dev]"
+      - name: Build source and wheel distributions
+        run: python -m build
       - name: Validate synthetic manifest
         run: python src/validate_manifest.py examples/manifest.example.json
       - name: Audit public tree
         run: python src/audit_public_release.py .
       - name: Run numerical and schema tests
         run: python -m unittest discover -s tests -v
+      - name: Run the installed synthetic pipeline
+        run: sports2d-dvideow demo --output build/synthetic-demo --frames 64
+      - name: Inspect the released DLC model registry
+        run: sports2d-dvideow models --json
       - name: Run synthetic DLT smoke test
         run: python src/reconstruct_json.py examples/dlt-input.example.json
       - name: Validate five-model benchmark plan
@@ -36,6 +45,17 @@ jobs:
       - name: Compile public utilities
         run: >-
           python -m py_compile
+          src/sports2d_dvideow_pipeline/__init__.py
+          src/sports2d_dvideow_pipeline/schema.py
+          src/sports2d_dvideow_pipeline/geometry.py
+          src/sports2d_dvideow_pipeline/temporal.py
+          src/sports2d_dvideow_pipeline/kinematics.py
+          src/sports2d_dvideow_pipeline/metrics.py
+          src/sports2d_dvideow_pipeline/pipeline.py
+          src/sports2d_dvideow_pipeline/cli.py
+          src/sports2d_dvideow_pipeline/adapters/mediapipe.py
+          src/sports2d_dvideow_pipeline/adapters/sports2d.py
+          src/sports2d_dvideow_pipeline/adapters/dlc.py
           src/validate_manifest.py
           src/audit_public_release.py
           src/dlt.py
@@ -49,3 +69,4 @@ jobs:
           src/run_mediapipe.py
           src/run_sports2d.py
           src/dlc_benchmark_plan.py
+          scripts/package_dlc_model_bundles.py

@@ -1,129 +1,58 @@
-# Engineering quickstart
+# Python API and command-line reference
 
-This repository is executable at the level of contracts and synthetic examples. The real experiment still requires an authorized private environment containing the videos, calibration records and model artifacts.
+The reusable implementation is in `src/sports2d_dvideow_pipeline/`. The command-line interface calls the same functions exported by the package.
 
-## 1. Install the public numerical core
+## Python API
 
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
+The central function accepts canonical 2D observations and calibration matrices:
+
+```python
+from sports2d_dvideow_pipeline.pipeline import process_trial, read_tracks_csv, write_result
+import json
+
+tracks = read_tracks_csv("camera_pair_tracks.csv")
+calibration = json.load(open("calibration.json", encoding="utf-8"))
+result = process_trial(
+    tracks,
+    calibration,
+    selected_side="right",
+    source="markerless",
+    sampling_hz=240.0,
+    window_start_frame=180,
+    impact_frame=240,
+    cameras=["CAM_1", "CAM_2"],
+)
+write_result(result, "trial-output")
 ```
 
-Run the complete public smoke test:
+For DVIDEOW manual coordinates, set `source="manual"` to skip the markerless 2D Hampel/interpolation/smoothing stage. Supply the same camera pair and verified calibration for the selected kicking side. The common 3D filter runs for both sources unless `apply_common_filter=False` is supplied.
 
-```powershell
-.\scripts\run_public_demo.ps1
+## Core modules
+
+| Module | Use |
+| --- | --- |
+| `schema` | Map estimator-specific labels and laterality to hip, knee, ankle and foot. |
+| `geometry` | Load 3×4 projection matrices or 11 DLT coefficients and triangulate with reprojection diagnostics. |
+| `temporal` | Curate automated 2D tracks, filter finite 3D segments and normalize a declared frame window. |
+| `kinematics` | Derive 3D velocities, speed magnitudes, signed knee/ankle angles and bilateral metrics. |
+| `metrics` | Coordinate and trajectory agreement, peak errors, participant-cluster Bland–Altman intervals, p-value adjustments and optional SPM1D analysis. |
+| `pipeline` | Coordinate CSV loading, 2D homologation, reconstruction, kinematics and file export. |
+| `adapters` | Call MediaPipe, Sports2D or DeepLabCut where the optional software is installed. |
+
+## Common 2D CSV
+
+Use one row per frame, camera and landmark:
+
+```text
+frame_index,camera,landmark,x_px,y_px,confidence
+0,CAM_1,hip,412.5,203.1,0.97
+0,CAM_1,knee,419.2,282.6,0.91
 ```
 
-If Windows has more than one Python installation, pass the interpreter used
-for the public environment with `-PythonExecutable`.
+`frame_index` is a zero-based integer. Coordinates are in pixels. `confidence` is optional; empty coordinates remain missing. Labels may use canonical names, common MediaPipe/Sports2D labels or the Spanish labels emitted by the thesis DLC models. When a label encodes laterality, the selected side determines which rows are used.
 
-It validates the manifest, audits the release tree, triangulates one synthetic point, normalizes one synthetic curve and expands the DLC benchmark plan. It never searches for or opens the thesis database.
+Calibration JSON contains a `projection_matrices` object whose camera values are either 3×4 arrays or 11-coefficient DLT arrays. The calibration units define the output 3D units. A calibration must match the image coordinates, camera identity and frame pairing supplied in the 2D file.
 
-## 2. Sports2D 2D route
+## CLI groups
 
-Install the external package in a private environment, then use the checked-in template and wrapper. The wrapper is dry-run by default:
-
-```powershell
-python -m pip install sports2d
-python src/run_sports2d.py `
-  --video $env:THESIS_PRIVATE_ROOT\videos\trial.mp4 `
-  --output-dir $env:THESIS_PRIVATE_ROOT\runs\sports2d `
-  --print-config
-```
-
-When the rendered configuration has been reviewed, add `--execute --keep-config`. The wrapper uses `Body_with_feet` (the official Sports2D name for the Halpe-26 body model), `balanced` mode, one subject, `greatest_displacement`, detection on every frame, `onnxruntime` with automatic device selection, the largest valid section, outlier rejection, interpolation only for gaps shorter than six frames, `NaN` for larger gaps, no internal filter, no output video/images, pose/angle exports enabled, and pixel-space output for the later common DLT step.
-
-The upstream CLI can also be called directly after editing a private copy of [`configs/sports2d.thesis.toml`](../configs/sports2d.thesis.toml):
-
-```powershell
-sports2d --config path\to\private\sports2d.generated.toml
-```
-
-Sports2D writes its own pose/angle formats such as TRC/MOT. The thesis pipeline does not treat that export as the final 3D result: [`homologate.py`](../src/homologate.py) makes the point vocabulary explicit, and [`dlt.py`](../src/dlt.py) applies the common two-view geometry.
-
-## 3. MediaPipe route
-
-Use the pinned optional environment only in a private workspace:
-
-```powershell
-python -m pip install mediapipe==0.10.21 opencv-python
-python src/run_mediapipe.py `
-  --video $env:THESIS_PRIVATE_ROOT\videos\trial.mp4 `
-  --output $env:THESIS_PRIVATE_ROOT\runs\mediapipe\trial.json `
-  --side right `
-  --camera-role CAM_1 `
-  --roi-config configs/mediapipe.roi.example.json
-```
-
-The adapter emits pixel coordinates, normalized coordinates, visibility and frame indices for hip/knee/ankle/foot. It keeps segmentation disabled, uses model complexity 2, applies the declared padded ROI when supplied, and maps the resized crop back to the original 848 × 480 pixel system exactly once. A visibility threshold marks low-confidence points invalid instead of replacing them with zero. Laterality selection, Hampel/PCHIP/Savitzky–Golay curation and the frame-offset decision remain explicit downstream steps.
-
-## 4. Homologation and DLT
-
-Run the synthetic adapter:
-
-```powershell
-python src/homologate.py examples/keypoints.example.json
-python src/reconstruct_json.py examples/dlt-input.example.json
-python src/reconstruct_json.py examples/dlt-trajectory.example.json --max-reprojection-px 5
-```
-
-For an authorized run, replace the synthetic JSON with a private per-frame contract. The DLT code accepts projection matrices or the legacy 11-coefficient form through `projection_matrix_from_dlt`; it triangulates one point or a frame sequence, returns per-camera reprojection errors, and attaches an explicit quality decision so bad geometry is rejected before biomechanics. Invalid frames remain in the output with a reason.
-
-This public core deliberately does not parse a DVIDEOW `.CAL` file or infer a
-camera from a legacy suffix. A private adapter must map the verified
-`CAM_1`/`CAM_2` calibration records into projection matrices and validate the
-frame convention against the original DVIDEOW output before accepting a run.
-
-Normalize only after the validity gate:
-
-```powershell
-python src/normalize_window.py `
-  path\to\private\normalized-input.json `
-  --points 101 `
-  --output path\to\private\normalized-output.json
-```
-
-Derive kinematics only from the quality-approved 3D contract. Missing rows are
-preserved as `null`; no manual reference coordinate is copied into the
-automated route:
-
-```powershell
-python src/derive_biomechanics.py `
-  path\to\private\quality-approved-3d.json `
-  --output path\to\private\derived-kinematics.json
-```
-
-The public example is executable without research data:
-
-```powershell
-python src/derive_biomechanics.py examples/biomechanics-input.example.json
-```
-
-## 5. DeepLabCut benchmark
-
-Inspect the public matrix and create a run plan:
-
-```powershell
-python src/dlc_benchmark_plan.py --config configs/dlc_benchmark.example.json
-```
-
-For a private DeepLabCut project, the safe runner defaults to dry-run:
-
-```powershell
-python src/run_dlc.py `
-  --action analyze `
-  --config-yaml path\to\private\config.yaml `
-  --video path\to\private\CAM_1_trial.mp4 `
-  --video path\to\private\CAM_2_trial.mp4 `
-  --output-dir path\to\private\runs\dlc `
-  --execute
-```
-
-Training and evaluation use the same high-level DeepLabCut API through `--action train`; the exact backend/version must be written into the private run manifest. No weights, snapshots, labels, predictions or benchmark outputs belong in this repository.
-
-## Reproducibility boundary
-
-The public code proves that the interfaces run. It does not claim that a researcher can regenerate human-subject results from this tree alone. The complete methodological order and all limitations are in [`pipeline.md`](pipeline.md) and [`limitations.md`](limitations.md).
+Run `sports2d-dvideow --help` and `sports2d-dvideow <command> --help` to see options for `demo`, `pose-mediapipe`, `pose-sports2d`, `pose-dlc`, `run`, `bilateral`, `agreement` and `models`. Installation and runnable commands are in the [README](../README.md).

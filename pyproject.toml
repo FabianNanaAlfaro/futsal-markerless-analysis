@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sports2d-dvideow-thesis-pipeline"
+version = "0.2.0"
+description = "Reusable markerless pose and biomechanical analysis methods from a futsal kicking thesis"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = "MIT"
+authors = [{ name = "Fabian A. Nana" }]
+dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.optional-dependencies]
+mediapipe = ["mediapipe==0.10.21", "opencv-python>=4.8,<5"]
+sports2d = ["sports2d==0.8.20", "torch==2.5.1", "torchvision==0.20.1"]
+dlc = ["deeplabcut==3.0.1", "torch==2.5.1", "torchvision==0.20.1"]
+dev = ["build>=1.2", "pytest>=8"]
+spm = ["spm1d>=0.4,<0.5"]
+
+[project.scripts]
+sports2d-dvideow = "sports2d_dvideow_pipeline.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sports2d_dvideow_pipeline = ["models/*.json"]

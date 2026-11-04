@@ -1,109 +1,67 @@
-# Methods and public contracts
+# Scientific conventions
 
-This page makes the interfaces concrete enough for another researcher to understand or reimplement the workflow with their own authorized data.
+The thesis is the method specification. This page records the conventions needed to use the reusable implementation with new videos and calibrations.
 
-## Canonical identifiers
+## Pose routes
 
-Use semantic identifiers rather than filename suffixes:
-
-| Field | Meaning | Public example |
+| Route | Study method | Functional points passed to the common pipeline |
 | --- | --- | --- |
-| `trial_id` | One kick/trial unit | `trial-demo-001` |
-| `side` | Anatomical side being analyzed | `right` |
-| `camera_role` | Camera position in the pair | `CAM_1` or `CAM_2` |
-| `route` | Observation source | `dvideow_manual`, `sports2d`, `mediapipe`, `deeplabcut` |
-| `frame_index` | Zero-based video frame | `0`, `1`, `2` |
-| `impact_frame` | Temporal anchor | symbolic in public examples |
+| Reference | Manual frame-by-frame DVIDEOW tracking and camera calibration | Kicking-side hip, knee, ankle and foot |
+| Sports2D | YOLOX detector, Halpe-26 body-with-feet pose model, greatest-displacement ordering and DeepSORT; a manual-selection rerun was used when tracking failed | Kicking-side hip, knee, ankle and foot |
+| MediaPipe Pose | v0.10.21, fixed camera/side ROI, expanded crop mapped back to source pixels, segmentation off | Kicking-side hip, knee, ankle and Foot Index from the 33-landmark output |
+| DeepLabCut | PyTorch, shared SSDLite detector and five pose configurations | Bilateral hip, knee, ankle and foot |
 
-The camera role comes from the canonical folder/manifest map. It is never inferred from a copied `c3`/`c4` suffix.
+MediaPipe side and camera-specific ROI are explicit analysis inputs. The thesis route retains the four landmarks on the declared kicking side.
 
-## 2D observation contract
+## 2D preprocessing for automated tracks
 
-Each point observation has this logical shape:
+The common automated 2D curation is applied before DLT:
 
-```json
-{
-  "trial_id": "trial-demo-001",
-  "side": "right",
-  "camera_role": "CAM_1",
-  "route": "sports2d",
-  "frame_index": 0,
-  "landmark": "ankle",
-  "x_px": 421.5,
-  "y_px": 238.0,
-  "likelihood": 0.91,
-  "valid": true,
-  "transform_ref": "full-frame"
-}
+1. Calculate coordinate velocity and apply a rolling Hampel median/MAD filter.
+2. Mark the complete point missing when either coordinate is an outlier.
+3. Interpolate interior gaps no longer than five frames per axis using PCHIP, with linear fallback when fewer than three local supports are available.
+4. Apply a light Savitzky–Golay smoother with a five-sample window and second-order polynomial.
+5. Retain long or edge gaps as missing.
+
+The five-frame half-window, three-MAD threshold, and Savitzky–Golay window/order are recovered from the experimental MediaPipe processing script; the thesis describes the algorithms and maximum gap, but not every parameter. DVIDEOW manual coordinates bypass this automatic 2D curation.
+
+## Reconstruction and coordinates
+
+Use the camera-specific calibration supplied by the investigator. The study uses two camera views per kicking side and 11 DLT coefficients per camera. The package also accepts 3×4 projection matrices, which makes the numerical core independent of legacy calibration file formats.
+
+The world axes are X anterior–posterior, Y mediolateral and Z vertical. For the sagittal analysis, +X is anterior and +Z is superior. The package reports calibration units unchanged. It does not parse DVIDEOW `.CAL` files or assert numerical equivalence to DVIDEOW without a direct paired calibration check.
+
+## Common temporal filter and phase
+
+The shared filter is a first-order, zero-phase Butterworth low-pass at 18 Hz with 240 Hz sampling, followed by robust LOWESS with span 0.10. Finite segments are filtered independently; the package does not extrapolate missing intervals. The reusable API allows sampling frequency and filter parameters to be supplied for another acquisition system.
+
+The analysis window begins before ball impact and ends at impact. The user supplies both frame indices. Curves are mapped to 101 points (0–100%); derivatives are computed before phase normalization using physical frame timing.
+
+## Angles and velocities
+
+All joint angles are computed from 3D landmarks projected to X–Z:
+
+- Knee: oriented angle relative to full extension; 0° at extension, positive flexion, negative hyperextension.
+- Ankle: oriented angle relative to the neutral perpendicular shank/foot reference; 0° neutral, positive dorsiflexion, negative plantarflexion.
+- Speed: Euclidean norm of the three velocity components at each functional point.
+- Angular velocity: time derivative of the unwrapped joint-angle signal, in degrees per second.
+
+The implementation follows the intended sign conventions stated in the thesis. For the ankle angle, the proximal shank vector is oriented ankle-to-knee so that the neutral reference is −90° before the 90° shift to zero.
+
+## Bilateral and method metrics
+
+Dominant (D) and nondominant (ND) labels are supplied by the study manifest. The package uses the thesis’s signed speed index:
+
+```text
+IS = 200 × (D − ND) / (D + ND)
 ```
 
-The values above are synthetic. A real input must also declare its frame rate, image dimensions, crop/ROI transform if any, preprocessing version and missingness policy. `x_px`/`y_px` are pixel coordinates; meters are not introduced until the DLT stage.
+Knee/ankle angles and angular velocities use signed `D − ND` differences. A zero denominator returns missing.
 
-## Routes
+Spatial agreement includes Euclidean MAE/RMSE, centered RMSE, P95 error, per-axis bias, CCC, NME and PCK. Temporal agreement includes Pearson/Spearman association and peak magnitude/phase errors. Bland–Altman confidence intervals resample participant clusters so paired trials remain together. Optional SPM1D uses one-way repeated-measures ANOVA and paired comparisons on complete, balanced trajectories. Apply Holm or BH correction to the family of p-values as specified by the analysis plan.
 
-### Sports2D route card
+## DeepLabCut training and evaluation partitions
 
-- Pose representation: body-with-feet / Halpe-26-compatible output.
-- Detector/tracker: declared RTMPose + YOLOX configuration in the private run manifest.
-- Subject policy: one selected subject, with identity and displacement rules recorded.
-- Detection frequency and thresholds: configuration fields, never hidden in code.
-- Short-gap interpolation is bounded; long gaps remain missing.
-- Export adapter maps the route output to the DVIDEOW-compatible 2D contract.
+The study labelled eight lower-limb points on 3,181 frames: 2,324 training and 857 selection-validation annotations. Labels were sampled at one frame in four from 240 Hz videos across the complete sequences. The split was participant-level, with one partition and one run per architecture. This sampling describes label construction only; it is not a pose-inference stride.
 
-### MediaPipe route card
-
-- Landmark model: MediaPipe Pose, 33 landmarks.
-- Region-of-interest coordinates are represented by a safe camera/side template; a real run records the selected transform and maps crop coordinates back to the full frame once.
-- Laterality candidates are compared against the manual temporal anchor in a small offset window.
-- Curation may include Hampel derivative screening, PCHIP for short gaps and Savitzky–Golay/acceleration checks.
-- Final route metadata preserves whether a point was observed, interpolated or rejected.
-
-### DeepLabCut route card
-
-- Eight functional points are homologated to the common vocabulary.
-- The model benchmark declares the detector, architecture, seed, split, snapshot and confidence cutoff.
-- A fixed detector and a held-out selection protocol are required for comparisons.
-- The benchmark is descriptive when training defaults differ across model configurations; it is not advertised as a pure architecture-only ablation.
-- Model weights, labeled images, snapshots and predictions are withheld.
-
-## Reference and DLT contract
-
-DVIDEOW manual tracking is the reference route, not a fourth markerless detector. The adapter preserves the legacy 2D/3D column semantics, frame base and missing-value behavior. A two-camera reconstruction uses the same homologous landmark and the same calibration reference for both views.
-
-Public acceptance conditions:
-
-- both camera roles are present for the same semantic trial/side;
-- the calibration reference exists in the private package;
-- the frame-base adapter is declared;
-- finite 3D values and reprojection checks pass the configured gate;
-- the executable [`quality_gate.py`](../src/quality_gate.py) records the accept/reject reason;
-- no manual coordinate is copied into an automated route;
-- every generated output points back to a manifest version.
-
-The public [`derive_biomechanics.py`](../src/derive_biomechanics.py) example
-implements the downstream finite-difference velocity, speed and joint-angle
-interfaces. It is a transparent contract utility, not a claim that synthetic
-values reproduce the withheld thesis results.
-
-## Temporal contract
-
-The comparison is restricted to the declared pre-impact-to-impact window. The normalized curve has 101 positions in that window. The pipeline does not claim to reconstruct a complete kick cycle or post-impact motion. A frame offset must be explicit and testable; the public validator rejects an omitted frame convention.
-
-## Metrics contract
-
-The analysis plan can request the following families:
-
-| Family | Examples | Interpretation boundary |
-| --- | --- | --- |
-| 2D point error | MAE, RMSE, centered RMSE, P95, NME, PCK, CCC | agreement in image space |
-| 3D reconstruction | MAE, RMSE, centered RMSE, P95, reprojection | spatial reconstruction |
-| Temporal shape | Pearson, Spearman, CCC, peak magnitude/phase | preservation of time-varying behavior |
-| Agreement | Bland–Altman, cluster bootstrap | bias/limits with repeated observations |
-| Inferential | repeated measures, paired tests, SPM, Holm/FDR | uncertainty and multiplicity control |
-| Symmetry | predeclared bilateral index | only when both sides pass validity |
-
-Metric values, participant rows and result plots are intentionally not stored in this public repository.
-
-## Branch and version discipline
-
-The local work contains historical and current DLC experiments with different splits/configuration details. They must remain separate branches in provenance. A manifest must name its branch, source commit, model/config version and analysis window. The public repository therefore documents the distinction without publishing conflicting result tables as if they were one experiment.
+The thesis’s strict spatial subset contains ten frames immediately before impact. The 101-point phase curves are a separate temporal representation. The validation partition was also used to select the checkpoint and architecture; it is not an independent external test set. See [`deeplabcut-benchmark.md`](deeplabcut-benchmark.md) for selected checkpoints and reported metrics.

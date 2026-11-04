@@ -1,75 +1,59 @@
 const stages = [
   {
-    id: "S00", label: "Framing", title: "Pregunta, ética y alcance",
-    summary: "La investigación empieza con una pregunta operacional: si las rutas markerless pueden sostener un análisis de movimiento y asimetría en el intervalo pre-impacto → impacto.",
-    input: "Pregunta + protocolo aprobado",
-    output: "Plan de análisis versionado",
-    gate: "Definir variables, límites y artefactos que nunca salen del paquete privado.",
-    doc: "docs/pipeline.md#stage-0--research-question-ethics-and-scope"
+    id: "S01", label: "Pose routes", title: "Keep each observation route identifiable",
+    summary: "Use manual DVIDEOW tracks as the reference and keep them separate from Sports2D, MediaPipe Pose and DeepLabCut predictions.",
+    input: "Synchronized camera videos",
+    output: "Pixel-space 2D landmarks",
+    detail: "MediaPipe side selection is explicit. The five DLC checkpoints share the thesis's eight-point lower-limb schema.",
+    doc: "docs/methods.md"
   },
   {
-    id: "S01", label: "Integrity map", title: "Inventario semántico, no por nombres accidentales",
-    summary: "Cada unidad se identifica por trial, lado y rol de cámara. Los sufijos históricos se resuelven como alias documentados; no se usan para intercambiar CAM_1 y CAM_2.",
-    input: "Fuentes y mapa de correspondencia",
-    output: "Manifest versionado",
-    gate: "Pareja de cámaras, plantilla de frames y origen trazables.",
-    doc: "docs/pipeline.md#stage-1--source-inventory-and-integrity-map"
+    id: "S02", label: "Homologation", title: "Map route-specific labels to four functional points",
+    summary: "Normalize hip, knee, ankle and foot names while preserving frame index, camera, confidence and missing coordinates.",
+    input: "Estimator-specific labels",
+    output: "Common 2D CSV",
+    detail: "Side-bearing labels are filtered using the selected kicking side. The pipeline keeps original pixel coordinates.",
+    doc: "docs/code.md"
   },
   {
-    id: "S02", label: "Synchronized views", title: "Anclar el tiempo antes de medir",
-    summary: "Las vistas sincronizadas conservan su frecuencia y dimensión. El evento de impacto funciona como ancla; el desplazamiento entre convenciones de frame se declara, nunca se adivina.",
-    input: "Par de vistas + ancla temporal",
-    output: "Contrato de frame",
-    gate: "Distinguir video row 0, DAT frame 1 y la relación con 3D.",
-    doc: "docs/methods.md#temporal-contract"
+    id: "S03", label: "2D curation", title: "Process automated tracks before reconstruction",
+    summary: "Apply the documented Hampel velocity mask, short-gap interpolation and light Savitzky–Golay smoothing to markerless tracks.",
+    input: "Automated 2D observations",
+    output: "Curated 2D tracks",
+    detail: "Manual DVIDEOW reference coordinates bypass this automated 2D curation stage.",
+    doc: "docs/methods.md"
   },
   {
-    id: "S03", label: "Parallel 2D routes", title: "Cuatro rutas, una comparación honesta",
-    summary: "DVIDEOW manual, Sports2D, MediaPipe Pose y DeepLabCut observan el movimiento de formas distintas. Cada una conserva su configuración y pasa por un adaptador explícito.",
-    input: "Vistas ancladas",
-    output: "Observaciones 2D por ruta",
-    gate: "No copiar coordenadas manuales a un detector ni ocultar la curation detrás de un número.",
-    doc: "docs/methods.md#routes"
+    id: "S04", label: "3D DLT", title: "Reconstruct with researcher-supplied calibration",
+    summary: "Triangulate homologous points from at least two camera views using 3×4 projection matrices or 11 DLT coefficients.",
+    input: "Paired pixels + calibration JSON",
+    output: "3D coordinates + reprojection errors",
+    detail: "The calibration units define the reconstructed coordinate units.",
+    doc: "docs/pipeline.md"
   },
   {
-    id: "S04", label: "Homologation", title: "Hablar el mismo idioma anatómico",
-    summary: "Hip, rodilla, tobillo y pie se convierten en la interfaz funcional común. Se conservan likelihood, validez, missingness y transformaciones de ROI.",
-    input: "Puntos 2D específicos de cada ruta",
-    output: "Contrato común de puntos",
-    gate: "Un valor ausente no se convierte en cero; toda transformación es reversible y versionada.",
-    doc: "docs/methods.md#2d-observation-contract"
+    id: "S05", label: "Kinematics", title: "Apply the common 3D temporal processing",
+    summary: "Filter finite 3D segments and derive positions, vector speeds, sagittal knee and ankle angles, and angular velocities.",
+    input: "Reconstructed 3D trajectories",
+    output: "Per-frame kinematics",
+    detail: "Axes, angle signs, sampling interval and the 18 Hz filter are documented in the methods page.",
+    doc: "docs/methods.md"
   },
   {
-    id: "S05", label: "Common DLT", title: "Reconstruir con la misma geometría",
-    summary: "Las dos observaciones homologadas entran al mismo contrato DLT. La calibración real permanece privada, pero su referencia, reproyección y controles forman parte del protocolo.",
-    input: "Dos puntos 2D + referencia de calibración",
-    output: "Contrato 3D con quality checks",
-    gate: "Pareja correcta, valores finitos, reproyección y base de frames aprobadas.",
-    doc: "docs/methods.md#reference-and-dlt-contract"
+    id: "S06", label: "Phase + bilateral", title: "Normalize the declared interval and compare sides",
+    summary: "Map pre-impact to impact into 101 phase points and calculate signed dominant/non-dominant speed and angle metrics.",
+    input: "Per-frame kinematics + frame range",
+    output: "Normalized curves + bilateral metrics",
+    detail: "The signed speed index follows the thesis equation 200 × (D − ND) / (D + ND).",
+    doc: "docs/reproducibility-notes.md"
   },
   {
-    id: "S06", label: "Temporal + biomechanics", title: "Filtrar sin borrar la pregunta",
-    summary: "La ventana pre-impacto → impacto se normaliza a 101 posiciones y alimenta trayectorias, velocidades, ángulos, velocidades angulares y variables bilaterales.",
-    input: "Trayectorias 3D válidas",
-    output: "Variables derivadas normalizadas",
-    gate: "Parámetros de filtro, orden, frecuencia y origen de cada punto viajan con el manifest.",
-    doc: "docs/pipeline.md#stage-6--temporal-treatment-and-biomechanical-variables"
-  },
-  {
-    id: "S07", label: "Validation + audit", title: "No reducir todo a un único score",
-    summary: "La evaluación separa acuerdo 2D, reconstrucción 3D, preservación temporal, estructura de acuerdo, simetría y robustez. Las afirmaciones siguen el tipo de validación que realmente se ejecutó.",
-    input: "Plan métrico + outputs válidos",
-    output: "Registro de evaluación auditable",
-    gate: "Distinguir selección 2D, validación 3D externa, exploratorio y confirmatorio.",
-    doc: "docs/methods.md#metrics-contract"
-  },
-  {
-    id: "S08", label: "Public release", title: "Publicar el proceso, no la base",
-    summary: "La última etapa valida el manifiesto sintético, audita archivos y privacidad, comprueba enlaces y publica la guía interactiva con commits trazables.",
-    input: "Árbol público revisado",
-    output: "Repositorio + guía visual",
-    gate: "Proof, database, videos, software, modelos y resultados deben estar ausentes.",
-    doc: "docs/data-boundary.md"
+    id: "S07", label: "Evaluation", title: "Match each metric to its scientific question",
+    summary: "Use coordinate agreement, trajectory association, peak errors, participant-cluster Bland–Altman intervals, p-value adjustment and optional SPM1D analysis.",
+    input: "Paired reference and model outputs",
+    output: "Metric summaries",
+    detail: "The DeepLabCut selection partition is not an independent test set.",
+    doc: "docs/limitations.md"
   }
 ];
 
@@ -82,11 +66,11 @@ function renderDetail(stage) {
     <h3 class="detail-title">${stage.title}</h3>
     <p class="detail-summary">${stage.summary}</p>
     <div class="detail-grid">
-      <div class="detail-cell"><span>Entra</span><p>${stage.input}</p></div>
-      <div class="detail-cell"><span>Sale</span><p>${stage.output}</p></div>
-      <div class="detail-cell"><span>Gate</span><p>${stage.gate}</p></div>
+      <div class="detail-cell"><span>Input</span><p>${stage.input}</p></div>
+      <div class="detail-cell"><span>Output</span><p>${stage.output}</p></div>
+      <div class="detail-cell"><span>Method</span><p>${stage.detail}</p></div>
     </div>
-    <a class="detail-link" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/${stage.doc}">Leer contrato completo ↗</a>
+    <a class="detail-link" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/${stage.doc}">Read the documentation ↗</a>
   `;
 }
 
@@ -109,4 +93,3 @@ stages.forEach((stage, index) => {
 });
 
 renderDetail(stages[0]);
-

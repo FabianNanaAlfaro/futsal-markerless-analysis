@@ -1,33 +1,11 @@
-# Audit notes and limitations
+# Validation scope
 
-This page is part of the release precisely because a professional research repository should state what it does not prove.
+The tests verify the package's numerical operations and file flow with known, synthetic inputs. They cover 2D homologation, DLT reconstruction, temporal filtering, missing values, angle signs, velocities, normalization, metrics and the end-to-end demo.
 
-## Claims supported by this public release
+The five DLC bundles are generated from the original selected checkpoints and their shared detector. Their hashes are checked before inference. Model inference needs the optional DeepLabCut/PyTorch environment and hardware with enough memory for the selected architecture; RTMPose-X, HRNet-W48 and ResNet-101 are the largest bundles. Model performance on new studies depends on video quality, viewpoint, population and annotation conventions.
 
-- The workflow has a documented common funnel from 2D observations to DLT, temporal variables and validation.
-- DVIDEOW is treated as a manual reference route; it is not conflated with a markerless detector.
-- Sports2D, MediaPipe and DeepLabCut are described as distinct routes with explicit adapters.
-- Camera identity, frame base, missingness and versioning are elevated to explicit contracts.
-- The repository has a machine-checkable public boundary and synthetic manifest.
+The thesis did not use an external optical 3D system, assess inter-rater or intra-rater tracking reliability, or benchmark processing time. Its DLC validation partition was used for model selection. These design limits remain in force when interpreting any new output.
 
-## Claims not made
+The package implements general linear DLT from researcher-supplied calibrations. It has not been shown numerically identical to DVIDEOW's legacy `.CAL` parser and reconstruction. Validate a new calibration and camera mapping against known points or reference outputs before using reconstructed values scientifically.
 
-- No claim that the public repository can reproduce participant-level results without the private research package.
-- No claim that the assigned DOI is already a final indexed article.
-- No claim that DeepLabCut's model comparison is a pure architecture ablation.
-- No claim of a universal best detector for every 2D, 3D, temporal or symmetry criterion.
-- No claim that a single run establishes multi-seed, GroupKFold or leave-one-subject-out robustness.
-- No claim that the thesis database, video software or calibration records are open data.
-
-## Known methodological limits retained from the audit
-
-- The external 3D comparison and the 2D route selection answer different questions and must not be merged into one score.
-- The pre-impact-to-impact window is not a full kick-cycle analysis.
-- Exploratory filters and route-specific curation can change temporal behavior; their parameters must travel with the manifest.
-- A held-out subset used for model selection is not automatically an untouched final external test.
-- Historical aliases and missing inputs are handled by the private provenance log; they are not repaired by silently rewriting source files.
-
-## Next responsible step
-
-An authorized continuation should add a preregistered robustness package—multiple seeds and subject-grouped evaluation where feasible—before making stronger generalization claims. That package would require a separate privacy and ethics review; it should not be solved by opening the current raw database.
-
+The runnable demo is synthetic. It tests execution and mathematical conventions but is not evidence of performance on the thesis videos. The thesis outcome values are not regenerated or altered by the demo.

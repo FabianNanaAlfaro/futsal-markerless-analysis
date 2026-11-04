@@ -1,121 +1,65 @@
-# Complete research pipeline
-
-This is the public reconstruction of the workflow carried out in the thesis project. It describes the sequence, interfaces and audit decisions without publishing the underlying database.
-
-## Study context
-
-The thesis evaluates markerless motion-analysis routes for futsal instep kicking and the downstream analysis of lower-limb asymmetry. The working study context is 13 professional male futsal participants, 78 trials and 156 synchronized camera views. Each trial is treated as a semantic unit; participant identifiers, files and frame rows are not public.
-
-The experimental setup used synchronized high-speed action-camera views at 240 Hz and a manually tracked DVIDEOW reference. The public documentation keeps these design facts because they explain the pipeline, while the original recordings, calibration and tracking files remain private.
-
-## Stage 0 — research question, ethics and scope
-
-**Question.** Can markerless 2D tracking and a common two-camera DLT reconstruction support a defensible analysis of lower-limb trajectories, velocities, joint angles and asymmetry during the pre-impact phase of a futsal instep kick?
-
-**Controls.** Before processing, the private package records the approved study protocol, consent boundary, source version and the intended variables. The public release only records the existence of that gate; it does not reproduce consent forms or participant information.
-
-**Output.** A versioned analysis plan with explicit acceptance criteria and a list of artifacts that may never enter a public repository.
-
-## Stage 1 — source inventory and integrity map
-
-The canonical key is semantic:
+# Processing workflow
 
 ```text
-trial_id + side + camera_role (CAM_1 | CAM_2)
+synchronized camera videos
+  ├─ manual frame tracking in DVIDEOW (reference)
+  ├─ Sports2D 2D pose estimates
+  ├─ MediaPipe Pose 2D landmarks
+  └─ DeepLabCut 2D landmarks (five trained configurations)
+          ↓
+common 2D schema → markerless 2D curation → camera-specific DLT
+          ↓
+common 3D temporal filter → positions / speeds / sagittal angles
+          ↓
+pre-impact-to-impact curves → bilateral and method comparisons
 ```
 
-Folder meaning is authoritative. Historical suffixes or copied filenames are aliases to resolve, not evidence that a camera has changed. Every repair is logged as a new manifest version; source files are not renamed, moved or overwritten during mapping.
+## 1. Estimate or digitize image coordinates
 
-The integrity pass checks that each logical trial has the expected camera pair, a compatible frame template, an explicit side, and a traceable relation between the 2D observation and its later 3D reconstruction. The public example uses `trial-demo-001`, never a real participant or path.
+Each route estimates or digitizes coordinates in image pixels. The manual DVIDEOW track remains the study reference. Sports2D, MediaPipe and DeepLabCut are separate inference routes; their outputs are not merged before evaluation.
 
-## Stage 2 — synchronized views and temporal anchor
+For the thesis, Sports2D used YOLOX with a Halpe-26 body-with-feet pose model. It ordered candidates by greatest displacement and used DeepSORT tracking; unusable tracks received a separate run with manual target selection. MediaPipe Pose 0.10.21 generated 33 landmarks from a fixed ROI per camera and side; only the kicking-side hip, knee, ankle and Foot Index were retained. The DLC benchmark trained five models on bilateral lower-limb points.
 
-The private source route uses the canonical video representation and retains the original frame rate and dimensions. A manual impact event anchors the time axis. The public contract represents the anchor as `impact_frame` without revealing a frame number, filename or participant.
+MediaPipe laterality is supplied explicitly by the researcher. This package does not select MediaPipe side or frame offset by minimizing error against DVIDEOW.
 
-Only the pre-impact-to-impact window is analyzed in the thesis comparison. It is not a full-kick or post-impact reconstruction. Each route keeps the frame index it observed; alignment is an explicit step, not an assumption hidden in a plot.
+## 2. Homologate and curate 2D coordinates
 
-## Stage 3 — parallel 2D observation routes
-
-The routes are deliberately parallel and are not collapsed into one opaque “AI model”.
-
-### A. DVIDEOW manual reference
-
-DVIDEOW manual tracking and its associated calibration/reconstruction workflow provide the reference coordinate system. The public repository describes the data shape and the DLT contract; it does not redistribute `.DAT`, `.CAL`, `.3D` or calibration values.
-
-### B. Sports2D
-
-The Sports2D route uses a pose detector/tracker configuration suitable for full-body-with-feet keypoints, keeps one subject, preserves the camera identity and exports a 2D representation that can be adapted to the DVIDEOW column semantics. Detection, tracking, interpolation and outlier decisions are recorded as route metadata rather than silently mixed with the reference.
-
-### C. MediaPipe Pose
-
-MediaPipe produces 33 landmarks per view. The thesis route uses camera/side regions of interest, laterality selection and a temporal curation chain. Candidates are selected against the manual temporal anchor; short gaps may be interpolated, while large gaps remain missing. Hampel speed screening, shape-preserving interpolation and Savitzky–Golay/acceleration checks are part of the auditable curation history.
-
-### D. DeepLabCut
-
-DeepLabCut is an additional automated 2D route with eight functional points and the same DLT semantics. The model benchmark compares configurations under a declared protocol. It is treated as a descriptive benchmark, not as a pure architecture ablation, because defaults such as optimizer, scheduler, head and pretraining can vary with the configuration. The held-out selection logic is documented, but no weights, snapshots, labeled images or prediction files are public.
-
-## Stage 4 — homologation and 2D contract
-
-Every route is adapted to the same functional vocabulary:
+The common CSV schema is:
 
 ```text
-hip → knee → ankle → foot
+frame_index,camera,landmark,x_px,y_px,confidence
 ```
 
-The adapter preserves, at minimum, `frame_index`, `x_px`, `y_px`, `likelihood`, `valid`, `source_route` and `camera_role`. Missingness is explicit. A point missing in both coordinates is not silently converted to a zero. Coordinate remapping from a crop back to the full image is recorded with the crop transform, not applied ad hoc in a later spreadsheet.
+The four point names are `hip`, `knee`, `ankle` and `foot`. Recognized route labels are mapped to that vocabulary. If a label encodes side, the unselected side is discarded. Labels without laterality require the user-selected side.
 
-The final temporal selector tests the small synchronization offset neighborhood against the manual anchor. It never copies manual coordinates into an automated route, fills an automated gap from the reference or exchanges views because a filename happens to contain `c3` or `c4`.
+Automated 2D coordinates receive a point-level validity mask based on a Hampel filter on coordinate velocity, using a five-frame half-window and a three-MAD threshold. An outlier in either coordinate invalidates both coordinates for that point. Interior gaps up to five frames are filled axis by axis with PCHIP, with linear interpolation when local support is insufficient. Long gaps and leading/trailing gaps remain missing. A five-sample, second-order Savitzky–Golay filter smooths finite segments. These numerical settings follow the experimental method script; the thesis describes the operations but does not list every numerical setting.
 
-## Stage 5 — common two-camera DLT reconstruction
+`--source manual` skips this automated 2D curation. This keeps the DVIDEOW reference path distinguishable from pose-estimator post-processing.
 
-The reconstruction applies the classical projective relation for each camera:
+## 3. Reconstruct 3D with supplied camera calibration
 
-```text
-[u, v, 1]ᵀ × P [X, Y, Z, 1]ᵀ = 0
-```
+The researcher supplies either a 3×4 projection matrix or 11 classical DLT coefficients for each camera. Each point and frame is triangulated from at least two matching views. The package exports coordinates, the cameras used, reprojection errors and a conditioning diagnostic. It does not impose a universal reprojection cutoff.
 
-where `P` is the 3 × 4 camera projection matrix represented by the 11 DLT coefficients. Two views of the same homologous point are combined to solve the 3D location. Reprojection error and finite-value checks are calculated before a trajectory can move downstream.
+The coordinate system follows the thesis: X anterior–posterior, Y mediolateral and Z vertical. Units come from the supplied calibration. Two cameras are required for a reconstruction; use the camera pair assigned to the kicking side in the study design.
 
-The local experiment uses a measured calibration volume and six camera-calibration records. This repository exposes neither the calibration numbers nor the files. Its synthetic manifest exposes only the relationship `camera_pair → calibration_ref → reconstruction_contract`.
+This is a general linear DLT implementation. Numerical agreement with DVIDEOW’s legacy reconstruction must be checked against the investigator’s DVIDEOW calibration and reference outputs before interpreting it as an exact software reproduction.
 
-The legacy frame convention is preserved by an explicit adapter: video row 0, DVIDEOW DAT frame 1, and 3D frame derived from the DAT convention. Any adapter that changes this base must fail validation rather than shifting a whole trajectory silently.
+## 4. Apply common 3D temporal processing
 
-## Stage 6 — temporal treatment and biomechanical variables
+The thesis applies a first-order Butterworth low-pass filter at 18 Hz (240 Hz sampling) followed by robust LOWESS with a 0.10 span to the four routes. The implementation accepts other sampling rates and filter settings through the reusable function API. Missing intervals are filtered as separate finite runs and are not filled across long gaps.
 
-Route-specific curation is kept visible. After reconstruction and quality checks, the common comparison window is normalized to 101 points between the pre-impact anchor and impact. The pipeline then derives, where valid:
+Positions and angular velocities are derived at the physical sampling rate. The declared window start and ball-impact frame are then mapped to 101 phase points from 0 to 100%. Missing intervals remain missing in the phase-normalized export.
 
-- 3D position and speed for hip, knee, ankle and foot;
-- knee and ankle angles and angular speeds;
-- temporal curves and peak magnitude/phase descriptors;
-- bilateral symmetry descriptors defined in the analysis plan.
+The researcher supplies the start and impact frame for each trial so the temporal window is explicit and consistent across camera views.
 
-Filtering is not treated as a cosmetic step. Cutoff, order, sampling rate, interpolation policy and the source of every retained point belong in the manifest. The public example uses parameter labels only; it contains no trajectory values.
+## 5. Derive biomechanical variables
 
-The public engineering path for this stage is [`normalize_window.py`](../src/normalize_window.py) followed by [`derive_biomechanics.py`](../src/derive_biomechanics.py). The latter exposes finite-difference velocity, speed and joint-angle primitives with explicit `null` handling; it does not bundle or regenerate the private thesis trajectories.
+For hip, knee, ankle and foot, the pipeline exports 3D positions, vector velocities and speed magnitudes. Sagittal joint angles use X–Z projections. Knee extension is 0° and flexion is positive; ankle neutral is 0°, dorsiflexion is positive and plantarflexion is negative. Angular velocity is computed from the unwrapped angle signal using the physical time step.
 
-## Stage 7 — validation and statistical audit
+For paired normalized trials, speed symmetry uses the signed index `200 × (D − ND) / (D + ND)`. Angle and angular-velocity metrics are signed dominant-minus-nondominant differences. Zero speed denominators are marked missing.
 
-The thesis separates several questions instead of relying on one score:
+## 6. Evaluate methods
 
-1. **2D agreement:** coordinate errors, centered errors, confidence-aware completeness and concordance.
-2. **3D reconstruction:** absolute and relative errors, RMSE/P95, reprojection and calibration diagnostics.
-3. **Temporal preservation:** Pearson/Spearman/CCC, peak magnitude and phase.
-4. **Agreement structure:** Bland–Altman limits and cluster bootstrap where specified.
-5. **Between-route effects:** repeated-measures omnibus/paired comparisons and SPM with multiplicity control.
-6. **Symmetry:** predeclared bilateral indices applied only when both sides satisfy the validity gate.
-7. **Robustness:** explicit separation between what was run once, what was exploratory and what remains pending.
+The library includes paired coordinate agreement (Euclidean MAE, RMSE, centered RMSE, P95, per-axis bias, CCC, and optional NME/PCK), trajectory Pearson and Spearman association, peak magnitude/phase error, cluster-bootstrap Bland–Altman limits, and Holm/BH p-value adjustment. Optional SPM1D support provides a repeated-measures omnibus test and paired automated-versus-reference tests for complete balanced curves.
 
-The release does not include the numeric tables, statistical exports or result images. It does include the acceptance logic so that a future authorized rerun can be audited without guessing what “good” meant.
-
-## Stage 8 — integrity, provenance and public release
-
-Before publication, the release process:
-
-1. validates the synthetic/public manifest;
-2. scans tracked files for private paths, credentials and blocked artifact types;
-3. checks that the proof, database, video/software artifacts and result figures are absent;
-4. confirms that all public links and attribution pages are explicit;
-5. runs the static interactive guide at desktop and mobile widths;
-6. records the commit that changed each public layer.
-
-The final repository is therefore a **pipeline companion**: reproducible at the level of contracts and checks, intentionally non-reproducible from the public tree alone at the level of human-subject observations.
+The thesis’s strict spatial evaluation used ten frames immediately before impact. That evaluation subset is distinct from the every-fourth-frame sampling used to construct the DLC training labels and from the 101-point temporal representation.

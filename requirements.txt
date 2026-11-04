@@ -1,3 +1,4 @@
-# Lightweight numerical core used by the public DLT/normalization examples.
+# Core dependencies for installing the source package without pip metadata.
 numpy>=1.26,<3
+scipy>=1.11,<2
 

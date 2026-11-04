@@ -1,16 +1,17 @@
 flowchart LR
-    Q["S00 · question + ethics"] --> I["S01 · integrity map"]
-    I --> V["S02 · synchronized views"]
-    V --> D["DVIDEOW<br/>manual reference"]
-    V --> S["Sports2D"]
-    V --> M["MediaPipe Pose"]
-    V --> L["DeepLabCut benchmark"]
-    D --> H["S04 · homologate points<br/>and frame contract"]
-    S --> H
-    M --> H
-    L --> H
-    H --> R["S05 · common two-camera DLT"]
-    R --> T["S06 · temporal window<br/>and biomechanics"]
-    T --> A["S07 · validation + audit"]
-    A --> P["S08 · public release<br/>manifest + checks + guide"]
-
+    V[Two synchronized camera views] --> D[DVIDEOW manual reference]
+    V --> S[Sports2D 2D pose]
+    V --> M[MediaPipe Pose 2D landmarks]
+    V --> L[DeepLabCut 2D predictions]
+    S --> C[Homologate hip, knee, ankle and foot]
+    M --> C
+    L --> C
+    C --> Q[Automated 2D curation]
+    D --> H[Pair camera observations]
+    Q --> H
+    H --> R[DLT reconstruction from supplied calibration]
+    R --> T[Common 3D temporal filtering]
+    T --> K[Positions, speeds and sagittal joint angles]
+    K --> N[Normalize pre-impact to impact]
+    N --> E[Compare methods and bilateral metrics]
+    E --> O[CSV and JSON exports]

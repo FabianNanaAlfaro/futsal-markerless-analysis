@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-labelledby="title desc">
   <title id="title">Sports2D DVIDEOW thesis pipeline overview</title>
-  <desc id="desc">A research question flows through an integrity map and synchronized views, branches into four 2D routes, and returns through homologation, DLT, temporal analysis, validation and public release.</desc>
+  <desc id="desc">Synchronized camera views pass through pose estimation, landmark mapping, DLT reconstruction, temporal processing, kinematics and validation.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#102840"/>
@@ -74,7 +74,7 @@
 
     <rect x="397" y="474" width="178" height="57" rx="15" fill="#17352f" stroke="#9ee6bc"/>
     <text x="415" y="498" fill="#9ee6bc" font-size="10" font-weight="700">S08</text>
-    <text x="415" y="516" fill="#edf5ff" font-size="13" font-weight="700">Public release</text>
+    <text x="415" y="516" fill="#edf5ff" font-size="13" font-weight="700">Analysis exports</text>
   </g>
   <g fill="none" stroke="#67d7ed" stroke-width="2" marker-end="url(#arrow)" stroke-linecap="round">
     <path d="M187 98H216"/><path d="M361 98H390"/><path d="M535 98H564"/>
@@ -82,6 +82,6 @@
     <path d="M153 278V327H209V362"/><path d="M308 278V327H209V362"/><path d="M455 278V327H209V362"/><path d="M623 278V327H209V362"/>
     <path d="M282 392H307"/><path d="M452 392H477"/><path d="M550 422V450H271V474"/><path d="M360 502H397"/>
   </g>
-  <text x="40" y="536" fill="#6e8198" font-family="Arial, sans-serif" font-size="10">No participant data · no result figures · contracts + provenance</text>
+  <text x="40" y="536" fill="#6e8198" font-family="Arial, sans-serif" font-size="10">Scientific Python package · trained DLC models · synthetic example</text>
 </svg>
 

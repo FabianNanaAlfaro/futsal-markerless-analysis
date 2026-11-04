@@ -1,14 +1,14 @@
 cff-version: 1.2.0
 message: "If this public pipeline is useful, cite the repository and the related preliminary work separately."
 title: "Sports2D–DVIDEOW thesis pipeline"
-version: "0.1.0"
-date-released: 2026-08-30
+version: "0.2.0"
+date-released: 2026-11-04
 abstract: >-
-  Public methodological companion for a thesis on the implementation and
-  validation of markerless motion-analysis algorithms for futsal kicking
-  asymmetry. It documents a common funnel from synchronized 2D views through
-  DVIDEOW reference tracking, Sports2D, MediaPipe, DeepLabCut, DLT and
-  multi-level validation without redistributing private data or results.
+  Installable Python library and command-line tool for lower-limb pose
+  processing, camera-calibrated DLT reconstruction and kicking kinematics,
+  implementing the reusable methods described in a futsal markerless-motion
+  thesis. Includes five thesis-trained DeepLabCut checkpoints and a synthetic
+  end-to-end example.
 authors:
   - family-names: "Nana Alfaro"
     given-names: "Fabian Alcides"

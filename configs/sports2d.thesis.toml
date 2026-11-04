@@ -1,22 +1,14 @@
-###############################################################################
-# Public template for the thesis Sports2D 2D route.
-#
-# Replace only __VIDEO_INPUT__ and __RESULT_DIR__ through
-# src/run_sports2d.py, or edit them manually in a private working directory.
-# Never put a real video, result folder or generated config in this repository.
-###############################################################################
+# Example Sports2D configuration for the thesis 2D route.
+# Edit a copy for each recording. Pose outputs remain in image pixel coordinates.
 
 [base]
-video_input = '__VIDEO_INPUT__'
 nb_persons_to_detect = 1
 person_ordering_method = 'greatest_displacement'
 first_person_height = 1.65
-visible_side = ['right'] # change to ['left'] for the other side
+visible_side = ['right'] # set for the camera-facing side; use ['auto'] when uncertain
 load_trc_px = ''
 compare = false
 time_range = []
-video_dir = ''
-webcam_id = 0
 input_size = [848, 480]
 show_realtime_results = false
 save_vid = false
@@ -24,45 +16,33 @@ save_img = false
 save_pose = true
 calculate_angles = true
 save_angles = true
-result_dir = '__RESULT_DIR__'
 
 [pose]
-slowmo_factor = 1
-pose_model = 'Body_with_feet'
+slowmo_factor = 1.0
+pose_model = 'body_with_feet'
 mode = 'balanced'
 det_frequency = 1
-device = 'auto' # CUDA when available; falls back according to the installed runtime.
+device = 'cpu'
 backend = 'onnxruntime'
 keypoint_likelihood_threshold = 0.30
 average_likelihood_threshold = 0.40
 keypoint_number_threshold = 0.60
-tracking_mode = 'sports2d'
-predict_displacement = false
-match_by = 'keypoints'
-max_distance = 250
-min_iou = 0.20
-max_unseen_time = 1.0
+tracking_mode = 'deepsort'
+deepsort_params = """{'max_age':30, 'n_init':3, 'nms_max_overlap':0.8, 'max_cosine_distance':0.3, 'nn_budget':200, 'max_iou_distance':0.8, 'embedder_gpu': False, 'embedder':'mobilenet'}"""
 
 [post-processing]
-# These are the closed Sports2D post-processing decisions used for the 2D
-# export. The later thesis curation/DLT stages remain separate.
+# Sports2D may process its native 2D products before common DLT reconstruction.
 interpolate = true
 interp_gap_smaller_than = 6
 fill_large_gaps_with = 'nan'
 sections_to_keep = 'largest'
-min_chunk_size = 10
 reject_outliers = true
 filter = false
 show_graphs = false
 save_graphs = false
 
 [px_to_meters_conversion]
-# Keep this route in pixel space: the thesis applies the common two-camera DLT
-# after homologation, rather than mixing a single-view scale estimate here.
+# The package uses two-view DLT for the thesis reconstruction route.
 to_meters = false
 make_c3d = false
 save_calib = false
-floor_angle = 'auto'
-xy_origin = ['auto']
-perspective_value = ''
-perspective_unit = 'from_calib'
