@@ -1,191 +1,308 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Futsal Markerless Analysis: Python tools for Sports2D, MediaPipe Pose, DeepLabCut, calibrated 3D reconstruction and futsal biomechanics.">
-  <meta name="theme-color" content="#08111f">
-  <title>Futsal Markerless Analysis · TeHealP</title>
+  <meta name="description" content="Futsal Markerless Analysis is a Python research package for markerless pose estimation, calibrated 3D reconstruction and futsal-kicking biomechanics.">
+  <meta name="theme-color" content="#fbfaf7">
+  <title>Futsal Markerless Analysis · TeHealP@PUCP</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#explorer">Saltar al pipeline</a>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Inicio del pipeline">
-      <span class="brand-mark" aria-hidden="true">F<span>M</span>A</span>
-      <span>Futsal Markerless Analysis</span>
-    </a>
-    <nav aria-label="Navegación principal">
-      <a href="#explorer">Workflow</a>
-      <a href="#models">DLC models</a>
-      <a href="#perimeter">Inputs and licenses</a>
-      <a class="nav-github" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis">GitHub ↗</a>
+  <header class="site-header">
+    <div class="masthead shell">
+      <a class="project-lockup" href="#overview" aria-label="Futsal Markerless Analysis home">
+        <span class="project-name">Futsal Markerless Analysis</span>
+        <span class="project-kind">Research software · Biomechanics</span>
+      </a>
+      <div class="institution-lockup">
+        <a class="brand-logo tehealp-logo" href="#authors" aria-label="Developed by TeHealP at PUCP">
+          <img src="assets/brand/tehealp-logo.png" alt="TeHealP" width="185" height="64">
+        </a>
+        <a class="brand-logo pucp-logo" href="https://www.pucp.edu.pe/" aria-label="Pontificia Universidad Católica del Perú">
+          <img class="logo-light" src="assets/brand/pucp-logo-color.png" alt="PUCP" width="160" height="77">
+          <img class="logo-dark" src="assets/brand/pucp-logo-negative.png" alt="" aria-hidden="true" width="160" height="80">
+        </a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">Dark mode</button>
+      </div>
+    </div>
+    <nav class="site-nav shell" aria-label="Project sections">
+      <a href="#overview">Overview</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#pose-systems">Pose systems</a>
+      <a href="#benchmark">DLC benchmark</a>
+      <a href="#methods">Biomechanics</a>
+      <a href="#documentation">Documentation</a>
+      <a href="#authors">Authors</a>
+      <a href="#citation">Citation</a>
     </nav>
   </header>
 
-  <main id="top">
-    <section class="hero shell" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="pulse"></span> PYTHON PACKAGE · v0.2.0</p>
-        <h1 id="hero-title">From synchronized video to lower-limb kinematics.</h1>
-        <p class="hero-lead">Installable Python tools for markerless pose estimation, two-camera DLT reconstruction, temporal processing and futsal-kicking analysis, based on the thesis methods.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis#installation">Install and run <span aria-hidden="true">↗</span></a>
-          <a class="button ghost" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis">Source code <span aria-hidden="true">↗</span></a>
-        </div>
-      </div>
-      <div class="hero-art" aria-label="Diagrama resumido del flujo de investigación">
-        <div class="art-glow"></div>
-        <img src="assets/pipeline-overview.svg" alt="Pose estimation, landmark mapping, DLT reconstruction, kinematics and validation" width="760" height="560">
-      </div>
-    </section>
+  <main id="main" class="page-layout shell">
+    <aside class="contents" aria-label="Contents">
+      <p class="contents-title">CONTENTS</p>
+      <ol>
+        <li><a href="#overview">Project overview</a></li>
+        <li><a href="#workflow">Processing workflow</a></li>
+        <li><a href="#software">Install and run</a></li>
+        <li><a href="#pose-systems">Pose systems</a></li>
+        <li><a href="#benchmark">DeepLabCut benchmark</a></li>
+        <li><a href="#methods">Biomechanical methods</a></li>
+        <li><a href="#data">Inputs and outputs</a></li>
+        <li><a href="#documentation">Documentation</a></li>
+        <li><a href="#authors">Authors and affiliations</a></li>
+        <li><a href="#citation">Citation</a></li>
+      </ol>
+      <a class="contents-repo" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis">GitHub repository ↗</a>
+    </aside>
 
-    <section class="stat-strip shell" aria-label="Resumen del proyecto">
-      <div><strong>2D → 3D</strong><span>multi-camera workflow</span></div>
-      <div><strong>4 routes</strong><span>reference + markerless</span></div>
-      <div><strong>5 DLC</strong><span>trained models</span></div>
-      <div><strong>240 Hz</strong><span>study acquisition</span></div>
-    </section>
-
-    <section id="explorer" class="section shell" aria-labelledby="explorer-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">01 · WORKFLOW</p>
-          <h2 id="explorer-title">Processing stages.</h2>
+    <article class="document">
+      <section id="overview" class="document-section overview" aria-labelledby="page-title">
+        <div class="eyebrow-row">
+          <span>RESEARCH SOFTWARE</span>
+          <span>VERSION 0.2.0</span>
+          <span>MIT LICENSE</span>
         </div>
-        <p class="section-note">Select a stage to see its inputs, outputs and related documentation.</p>
-      </div>
-      <div class="explorer-layout">
-        <div id="stage-list" class="stage-list" role="list" aria-label="Pipeline stages"></div>
-        <article id="stage-detail" class="stage-detail" aria-live="polite"></article>
-      </div>
-      <noscript><p class="noscript">The full documentation is available in the <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/tree/main/docs">docs folder</a>.</p></noscript>
-    </section>
+        <h1 id="page-title">Futsal Markerless Analysis</h1>
+        <p class="lead">A Python package and command-line tool for lower-limb pose processing, calibrated three-dimensional reconstruction and kinematic analysis of the futsal instep kick.</p>
+        <p class="byline"><strong>Developed by TeHealP@PUCP.</strong> The software implements the thesis workflow and keeps manual DVIDEOW reference tracks separate from Sports2D, MediaPipe Pose and DeepLabCut estimates.</p>
 
-    <section id="models" class="section shell" aria-labelledby="models-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">02 · POSE SYSTEMS</p>
-          <h2 id="models-title">Use the trained models.</h2>
-        </div>
-        <p class="section-note">Run the five thesis-trained DeepLabCut configurations or use Sports2D and MediaPipe for new videos.</p>
-      </div>
-      <div class="model-layout">
-        <figure class="model-figure">
-          <img src="assets/halpe-26-keypoints.svg" alt="Esquema original de los 26 puntos corporales Halpe-26" width="1080" height="680">
-          <figcaption>Halpe-26 lower-limb and whole-body keypoint scheme used by the Sports2D body-with-feet model.</figcaption>
-        </figure>
-        <div class="model-copy">
-          <p class="eyebrow">SPORTS2D / HALPE-26</p>
-          <h3>Run 2D pose estimation on a camera view.</h3>
-          <p>The thesis route used the <code>Body_with_feet</code> / Halpe-26 pose model, greatest-displacement person ordering and DeepSORT tracking. The 2D results can be mapped to the common landmark schema before multi-camera reconstruction.</p>
-          <pre><code>futsal-markerless pose-sports2d \
-  --video camera-1.mp4 \
-  --config study-camera-1.toml \
-  --output pose-output</code></pre>
-          <p class="code-note">See the Sports2D method notes for settings that the thesis did not report.</p>
-          <div class="source-links"><a href="https://github.com/davidpagnon/Sports2D">Sports2D ↗</a><a href="https://doi.org/10.21105/joss.06849">Pagnon &amp; Kim · JOSS ↗</a><a href="https://github.com/Fang-Haoshu/Halpe-FullBody">Halpe-FullBody ↗</a></div>
-        </div>
-      </div>
-      <div class="benchmark-strip">
-        <div><span class="benchmark-label">DLC BENCHMARK</span><strong>5 configuraciones</strong><span>RTMPose-S · RTMPose-M · RTMPose-X · HRNet-W48 · ResNet-101</span></div>
-        <a class="button ghost" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/deeplabcut-benchmark.md">Download models and metadata ↗</a>
-      </div>
-      <div class="command-grid" aria-label="Kit de comandos del pipeline">
-        <article class="command-card">
-          <span class="command-index">01 · 2D</span>
-          <h3>MediaPipe + ROI</h3>
-          <p>Recorta por cámara, devuelve a píxeles originales y deja la visibilidad explícita.</p>
-          <pre><code>futsal-markerless pose-mediapipe \
-  --video camera-1.mp4 --side right \
-  --camera CAM_1 \
-  --roi-config configs/mediapipe.roi.example.json</code></pre>
-        </article>
-        <article class="command-card">
-          <span class="command-index">02 · BENCH</span>
-          <h3>DeepLabCut</h3>
-          <p>Choose one of the five released checkpoints and export canonical 2D tracks.</p>
-          <pre><code>futsal-markerless pose-dlc \
-  --model ResNet-101 --model-bundle models\ResNet-101 \
-  --video camera-1.mp4 --camera CAM_1 --output predictions</code></pre>
-        </article>
-        <article class="command-card">
-          <span class="command-index">03 · 3D</span>
-          <h3>DLT + quality gate</h3>
-          <p>Combine synchronized pixel tracks with the investigator's camera calibration.</p>
-          <pre><code>futsal-markerless run \
-  --tracks paired_tracks.csv --calibration calibration.json \
-  --side right --impact-frame 240 --window-start-frame 180 \
-  --output trial-output</code></pre>
-        </article>
-        <article class="command-card">
-          <span class="command-index">04 · DERIVED</span>
-          <h3>Cinemática</h3>
-          <p>Export 3D positions, speeds, sagittal joint angles and a 101-point phase curve.</p>
-          <pre><code>futsal-markerless bilateral \
-  --dominant right.csv --non-dominant left.csv \
-  --output bilateral.csv</code></pre>
-        </article>
-      </div>
-    </section>
+        <dl class="project-facts">
+          <div><dt>Language</dt><dd>Python 3.10–3.12</dd></div>
+          <div><dt>Pose routes</dt><dd>Sports2D · MediaPipe · DeepLabCut</dd></div>
+          <div><dt>Reconstruction</dt><dd>Calibrated two-camera DLT</dd></div>
+          <div><dt>Exports</dt><dd>CSV · JSON</dd></div>
+        </dl>
+      </section>
 
-    <section id="perimeter" class="section section-tint" aria-labelledby="perimeter-title">
-      <div class="shell">
+      <section id="workflow" class="document-section" aria-labelledby="workflow-title">
         <div class="section-heading">
-          <div>
-            <p class="eyebrow">03 · INPUTS AND LICENSES</p>
-            <h2 id="perimeter-title">Bring study videos and calibrations.</h2>
-          </div>
-          <p class="section-note">The package accepts new synchronized videos, 2D tracks and camera calibrations.</p>
+          <span class="section-number">01</span>
+          <div><p class="section-kicker">ANALYSIS SEQUENCE</p><h2 id="workflow-title">From image coordinates to kinematics</h2></div>
         </div>
-        <div class="perimeter-grid">
-          <div class="perimeter-card included">
-            <div class="card-icon">＋</div>
-            <h3>Included</h3>
-            <ul>
-              <li>Installable Python package and command-line tool</li>
-              <li>Five selected pose models and shared detector</li>
-              <li>Portable model settings and checkpoint hashes</li>
-              <li>Synthetic end-to-end example and tests</li>
-            </ul>
+        <figure class="process-figure">
+          <figcaption>Separate 2D observation routes enter a shared reconstruction and analysis sequence.</figcaption>
+          <div class="route-table">
+            <div class="route-row">
+              <span class="route-label">Reference</span>
+              <p><strong>Manual DVIDEOW tracking</strong><small>Frame-by-frame 2D coordinates; used for subsequent evaluation.</small></p>
+              <span class="route-output">Pixel-space tracks</span>
+            </div>
+            <div class="route-row">
+              <span class="route-label">Pose estimates</span>
+              <p><strong>Sports2D · MediaPipe Pose · DeepLabCut</strong><small>Each estimator produces an independent 2D track.</small></p>
+              <span class="route-output">Pixel-space tracks</span>
+            </div>
           </div>
-          <div class="perimeter-card excluded">
-            <div class="card-icon">−</div>
-            <h3>Supplied by each study</h3>
-            <ul>
-              <li>Study videos and synchronized 2D observations</li>
-              <li>Camera calibration matrices or DLT coefficients</li>
-              <li>Impact frame and kicking-side labels</li>
-              <li>New annotations for fine-tuning</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+          <ol class="shared-sequence" aria-label="Shared processing steps">
+            <li><span>01</span><strong>Homologate</strong><small>Hip · knee · ankle · foot</small></li>
+            <li><span>02</span><strong>Curate 2D</strong><small>Automated tracks</small></li>
+            <li><span>03</span><strong>Reconstruct</strong><small>Calibrated DLT</small></li>
+            <li><span>04</span><strong>Process 3D</strong><small>Temporal filter</small></li>
+            <li><span>05</span><strong>Derive</strong><small>Positions · speeds · angles</small></li>
+            <li><span>06</span><strong>Evaluate</strong><small>Compare with reference</small></li>
+          </ol>
+          <p class="figure-note">The manual reference bypasses automated 2D curation. Camera synchronization, frame correspondence and calibration are supplied for each study.</p>
+        </figure>
+      </section>
 
-    <section id="evidence" class="section shell" aria-labelledby="evidence-title">
-      <div class="evidence-layout">
-        <div>
-          <p class="eyebrow">04 · REFERENCES</p>
-          <h2 id="evidence-title">Scientific and software references.</h2>
-          <p>Use the thesis for the experimental procedure and cite the original pose-estimation tools together with this package.</p>
-          <div class="evidence-actions">
-            <a class="button primary" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/sources.md">View citations ↗</a>
-            <a class="text-link" href="https://doi.org/10.21105/joss.06849">Sports2D · JOSS ↗</a>
+      <section id="software" class="document-section" aria-labelledby="software-title">
+        <div class="section-heading">
+          <span class="section-number">02</span>
+          <div><p class="section-kicker">INSTALLATION AND USE</p><h2 id="software-title">Install the package</h2></div>
+        </div>
+        <p>Install the numerical core in a virtual environment. Pose-estimation systems are optional extras and are best installed in separate environments to manage their computer-vision and GPU dependencies.</p>
+        <pre class="code-block"><code>git clone https://github.com/FabianNanaAlfaro/futsal-markerless-analysis.git
+cd futsal-markerless-analysis
+python -m venv .venv
+python -m pip install --upgrade pip
+python -m pip install .
+futsal-markerless demo --output demo-output --frames 64</code></pre>
+        <p>The synthetic demo writes processed 2D tracks, reconstructed 3D kinematics, a 101-point phase curve, reprojection diagnostics and run metadata. It contains no thesis observations.</p>
+        <div class="command-examples">
+          <div class="command-example">
+            <h3>MediaPipe Pose</h3>
+            <pre class="code-block"><code>python -m pip install ".[mediapipe]"
+futsal-markerless pose-mediapipe \
+  --video camera-1.mp4 --camera CAM_1 --side right \
+  --roi-config roi.json --output camera-1-tracks.csv</code></pre>
+          </div>
+          <div class="command-example">
+            <h3>DeepLabCut with local weights</h3>
+            <pre class="code-block"><code>futsal-markerless pose-dlc \
+  --model ResNet-101 --model-bundle ./study-models/ResNet-101 \
+  --video camera-1.mp4 --camera CAM_1 --output predictions</code></pre>
           </div>
         </div>
-        <div class="evidence-stamp" aria-label="Certificado de presentación incluido">
-          <span class="stamp-ring">DLC<br><b>×5</b></span>
-          <span class="stamp-label">MODEL<br>CHECKPOINTS</span>
+        <p class="method-note">DeepLabCut pose and detector weights are not distributed in the repository or its Releases. The command requires a compatible local model bundle. See the <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/deeplabcut-benchmark.md">benchmark guide</a> for environment details.</p>
+      </section>
+
+      <section id="pose-systems" class="document-section" aria-labelledby="pose-title">
+        <div class="section-heading">
+          <span class="section-number">03</span>
+          <div><p class="section-kicker">TWO-DIMENSIONAL ESTIMATION</p><h2 id="pose-title">Pose systems</h2></div>
         </div>
-      </div>
-    </section>
+        <div class="table-scroll pose-system-scroll" role="region" tabindex="0" aria-label="Pose-system comparison">
+          <table class="technical-table pose-system-table">
+            <thead><tr><th scope="col">Route</th><th scope="col">Study procedure</th><th scope="col">Output and configuration</th></tr></thead>
+            <tbody>
+              <tr>
+                <th scope="row">Sports2D</th>
+                <td data-label="Study procedure">YOLOX with the Halpe-26 body-with-feet pose model; candidate ordering by greatest displacement; DeepSORT tracking. An unusable initial track received a separate manual target-selection rerun.</td>
+                <td data-label="Output and configuration">Native Sports2D products and canonical 2D tracks. The runnable TOML example records which settings are not specified in the thesis.</td>
+              </tr>
+              <tr>
+                <th scope="row">MediaPipe Pose</th>
+                <td data-label="Study procedure">Version 0.10.21; inference over 33 landmarks with a fixed region of interest per camera and kicking side. Retain the kicking-side hip, knee, ankle and Foot Index.</td>
+                <td data-label="Output and configuration">ROI coordinates are mapped back to original-image pixels before shared homologation and reconstruction.</td>
+              </tr>
+              <tr>
+                <th scope="row">DeepLabCut</th>
+                <td data-label="Study procedure">Five trained configurations estimate eight bilateral lower-limb points: hip, knee, ankle and foot on each side.</td>
+                <td data-label="Output and configuration">Portable configuration records and benchmark metadata are included. Checkpoint weights and the annotated dataset are not distributed.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="anatomy-figure">
+          <img src="assets/halpe-26-keypoints.svg" alt="Halpe-26 whole-body keypoint diagram used by the Sports2D body-with-feet model" width="1080" height="680" loading="lazy">
+          <figcaption>Halpe-26 keypoint scheme used in the Sports2D body-with-feet route.</figcaption>
+        </figure>
+      </section>
+
+      <section id="benchmark" class="document-section" aria-labelledby="benchmark-title">
+        <div class="section-heading">
+          <span class="section-number">04</span>
+          <div><p class="section-kicker">DEEPLABCUT MODEL COMPARISON</p><h2 id="benchmark-title">Five trained configurations</h2></div>
+        </div>
+        <p>Each architecture was trained in one exploratory run. The values below are from the participant-level selection-validation partition; they do not establish a general ranking of architectures.</p>
+        <div class="table-scroll">
+          <table class="technical-table benchmark-table">
+            <thead><tr><th scope="col">Architecture</th><th scope="col">Selected epoch</th><th scope="col">RMSE (px)</th><th scope="col">RMSE, p-cutoff 0.6 (px)</th><th scope="col">mAP</th><th scope="col">mAR</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">ResNet-101</th><td>25</td><td>12.55</td><td>12.25</td><td>84.88</td><td>90.75</td></tr>
+              <tr><th scope="row">HRNet-W48</th><td>35</td><td>12.49</td><td>12.26</td><td>86.75</td><td>90.91</td></tr>
+              <tr><th scope="row">RTMPose-S</th><td>15</td><td>13.82</td><td>13.64</td><td>77.40</td><td>85.93</td></tr>
+              <tr><th scope="row">RTMPose-M</th><td>28</td><td>15.54</td><td>14.58</td><td>66.23</td><td>76.00</td></tr>
+              <tr><th scope="row">RTMPose-X</th><td>4</td><td>15.62</td><td>15.83</td><td>61.29</td><td>75.06</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">The training set contains 3,181 labelled frames (2,324 training; 857 validation). Labels were sampled one frame in four across full 240 Hz sequences. This describes annotation sampling, not inference stride or the strict ten-frame evaluation subset before impact.</p>
+        <p>Architecture settings, checkpoint identifiers, hashes and inference parameters are recorded in the <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/tree/main/configs/deeplabcut/benchmark">portable configuration records</a> and the <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/deeplabcut-benchmark.md">benchmark documentation</a>.</p>
+      </section>
+
+      <section id="methods" class="document-section" aria-labelledby="methods-title">
+        <div class="section-heading">
+          <span class="section-number">05</span>
+          <div><p class="section-kicker">THREE-DIMENSIONAL PROCESSING</p><h2 id="methods-title">Biomechanical methods</h2></div>
+        </div>
+        <div class="table-scroll">
+          <table class="technical-table">
+            <thead><tr><th scope="col">Operation</th><th scope="col">Convention and parameters</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Landmark schema</th><td>Estimator labels map to hip, knee, ankle and foot. Side-bearing labels are filtered by the selected kicking side; pixel coordinates retain camera and frame identifiers.</td></tr>
+              <tr><th scope="row">2D curation</th><td>Markerless tracks use a five-frame Hampel half-window with a three-MAD threshold, short-gap interpolation up to five frames (PCHIP with linear fallback), then a five-sample, second-order Savitzky–Golay filter. Manual DVIDEOW tracks bypass this stage.</td></tr>
+              <tr><th scope="row">DLT reconstruction</th><td>At least two synchronized views are triangulated using researcher-supplied 3×4 projection matrices or 11 classical DLT coefficients. Output units follow the calibration.</td></tr>
+              <tr><th scope="row">Common 3D filter</th><td>First-order, zero-phase 18 Hz Butterworth low-pass at 240 Hz, followed by robust LOWESS with span 0.10. Finite segments are processed separately.</td></tr>
+              <tr><th scope="row">Axes and angles</th><td>X anterior–posterior, Y mediolateral, Z vertical. In the sagittal X–Z plane, +X is anterior and +Z is superior. Knee extension is 0°, flexion positive and hyperextension negative. Ankle neutral is 0°, dorsiflexion positive and plantarflexion negative.</td></tr>
+              <tr><th scope="row">Derived variables</th><td>Three-dimensional positions, vector-speed magnitudes and angular velocities in degrees per second. Angular velocity is derived from the unwrapped angle signal before phase normalization.</td></tr>
+              <tr><th scope="row">Phase and bilateral metrics</th><td>The declared pre-impact-to-impact interval is mapped to 101 points. Speed symmetry is signed: <code>IS = 200 × (D − ND) / (D + ND)</code>, where D and ND are dominant and non-dominant speed magnitudes.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="figure-note">Positive IS indicates greater speed in the dominant leg; negative IS indicates greater speed in the non-dominant leg; zero indicates equal magnitudes. Joint-angle and angular-velocity differences use signed dominant minus non-dominant values.</p>
+      </section>
+
+      <section id="data" class="document-section" aria-labelledby="data-title">
+        <div class="section-heading">
+          <span class="section-number">06</span>
+          <div><p class="section-kicker">STUDY INPUTS AND EXPORTS</p><h2 id="data-title">Bring videos and calibration</h2></div>
+        </div>
+        <div class="table-scroll">
+          <table class="technical-table">
+            <thead><tr><th scope="col">Input</th><th scope="col">Description</th><th scope="col">Export</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Video and 2D tracks</th><td>Synchronized camera views, or CSV observations with frame, camera, landmark, pixel coordinates and confidence.</td><td>Canonical 2D observations and per-frame processing metadata.</td></tr>
+              <tr><th scope="row">Camera calibration</th><td>One projection matrix or 11 DLT coefficients per camera; researcher specifies camera pairing and frame correspondence.</td><td>3D coordinates and reprojection diagnostics.</td></tr>
+              <tr><th scope="row">Trial metadata</th><td>Kicking side, source type, analysis start frame, impact frame and sampling rate.</td><td>Positions, speeds, knee and ankle angles, angular velocities, normalized curves and bilateral metrics.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="documentation" class="document-section" aria-labelledby="docs-title">
+        <div class="section-heading">
+          <span class="section-number">07</span>
+          <div><p class="section-kicker">TECHNICAL DOCUMENTATION</p><h2 id="docs-title">Methods and reference</h2></div>
+        </div>
+        <ul class="document-links">
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis#installation">Installation and CLI examples</a><span>README</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/pipeline.md">Processing workflow</a><span>Pipeline</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/methods.md">Scientific methods and conventions</a><span>Methods</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/sports2d.md">Sports2D configuration and outputs</a><span>Pose system</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/configs/mediapipe.roi.example.json">MediaPipe ROI example</a><span>Configuration</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/reproducibility-notes.md">Reproducibility notes</a><span>Study record</span></li>
+          <li><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/sources.md">Scientific sources</a><span>References</span></li>
+        </ul>
+      </section>
+
+      <section id="authors" class="document-section" aria-labelledby="authors-title">
+        <div class="section-heading">
+          <span class="section-number">08</span>
+          <div><p class="section-kicker">SCIENTIFIC AUTHORSHIP</p><h2 id="authors-title">Authors and affiliations</h2></div>
+        </div>
+        <p><strong>Developed by TeHealP@PUCP.</strong> Fabian Alcides Ñaña Alfaro and Luiz Henrique Palucci Vieira are laboratory members linked to the project.</p>
+        <div class="table-scroll">
+          <table class="technical-table author-table">
+            <thead><tr><th scope="col">Author</th><th scope="col">Affiliation(s)</th><th scope="col">Identifier</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Fabian Alcides Ñaña Alfaro</th><td>TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td><a href="https://orcid.org/0009-0000-7881-1223">ORCID ↗</a></td></tr>
+              <tr><th scope="row">Paulo Roberto Pereira Santiago</th><td>School of Physical Education and Sport of Ribeirão Preto, University of São Paulo, Ribeirão Preto, Brazil.</td><td><a href="https://orcid.org/0000-0002-9460-8847">ORCID ↗</a></td></tr>
+              <tr><th scope="row">Bruno Luiz de Souza Bedo</th><td>School of Physical Education and Sport, University of São Paulo, São Paulo, Brazil.</td><td><a href="https://orcid.org/0000-0003-3821-2327">ORCID ↗</a></td></tr>
+              <tr><th scope="row">Rodrigo Leal de Queiroz Thomaz de Aquino</th><td>Federal University of Espírito Santo, Vitória, Brazil; Brazilian National Football Confederation, Rio de Janeiro, Brazil.</td><td><a href="https://orcid.org/0000-0002-4885-7316">ORCID ↗</a></td></tr>
+              <tr><th scope="row">Luiz Henrique Palucci Vieira</th><td>TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td><a href="https://orcid.org/0000-0001-6981-756X">ORCID ↗</a></td></tr>
+              <tr><th scope="row">César Armando Beltrán Castañón</th><td>Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="citation" class="document-section citation-section" aria-labelledby="citation-title">
+        <div class="section-heading">
+          <span class="section-number">09</span>
+          <div><p class="section-kicker">CITATION</p><h2 id="citation-title">Cite the software and related work separately</h2></div>
+        </div>
+        <div class="citation-block">
+          <p class="citation-label">Software · APA 7</p>
+          <p class="citation-text">Nana, F. A., Santiago, P. R. P., Bedo, B. L. S., Aquino, R., Palucci Vieira, L. H., &amp; Beltrán Castañón, C. A. (2026). <em>Futsal Markerless Analysis</em> (Version 0.2.0) [Computer software]. GitHub.</p>
+          <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/CITATION.cff">Machine-readable citation ↗</a>
+        </div>
+        <div class="related-work">
+          <h3>Related publication</h3>
+          <p><strong>Preliminary analysis of markerless three-dimensional trajectory reconstruction during the futsal instep kicking using Sports2D.</strong></p>
+          <p>Fabian A. Nana, Paulo R. P. Santiago, Bruno L. S. Bedo, Rodrigo Aquino and Luiz H. Palucci Vieira. Accepted for publication in <em>Sports Biomechanics</em>. <a href="https://doi.org/10.1080/14763141.2026.2680520">Assigned DOI ↗</a>. Presented orally at the 44th International Society of Biomechanics in Sports conference; see the <a href="evidence/ISBS2026_oral_certificate.pdf">presentation certificate</a>.</p>
+          <p class="method-note">The article retains its original five-author list. The repository software citation lists six authors.</p>
+        </div>
+      </section>
+    </article>
   </main>
 
-  <footer class="footer shell">
-    <div class="footer-brand"><span class="brand-mark small" aria-hidden="true">F<span>M</span>A</span><span>Futsal Markerless Analysis · Python package</span><span class="tehealp-logo"><img src="assets/brand/tehealp-logo.png" alt="TeHealP logo" loading="lazy"></span></div>
-    <div class="footer-links"><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/contributors.md">Contributors</a><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/docs/data-boundary.md">Data boundary</a><a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/CITATION.cff">Cite</a></div>
+  <footer class="site-footer">
+    <div class="footer-inner shell">
+      <div class="footer-identity">
+        <span>Developed by <strong>TeHealP@PUCP</strong></span>
+        <span>Futsal Markerless Analysis · MIT License</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis">Repository</a>
+        <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/LICENSE">License</a>
+        <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/NOTICE.md">Attribution</a>
+        <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/CITATION.md">Citation guide</a>
+      </div>
+    </div>
   </footer>
   <script src="app.js" defer></script>
 </body>

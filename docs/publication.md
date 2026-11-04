@@ -7,11 +7,11 @@
 Authors in the supplied record: Fabian A. Nana, Paulo R. P. Santiago, Bruno L. S. Bedo, Rodrigo Aquino and Luiz H. Palucci Vieira.
 
 - **Assigned DOI:** [10.1080/14763141.2026.2680520](https://doi.org/10.1080/14763141.2026.2680520)
-- **Release label:** assigned / in production.
+- **Publication status:** accepted for publication in *Sports Biomechanics*.
 - **Important status note:** the DOI is retained as the assigned identifier supplied with the project materials. This repository does not upload or reproduce the journal proof and does not describe the work as a final indexed article until the publisher record is live and independently verifiable.
 - **Related method:** [Sports2D, DOI 10.21105/joss.06849](https://doi.org/10.21105/joss.06849).
 
-The public companion uses the DOI as a citation pointer, not as a reason to disclose the proof, figures, participant-level observations or unpublished result exports.
+This related publication retains its original five-author list. It is separate from the six-author software citation in [`CITATION.cff`](../CITATION.cff). The DOI identifies the publication, not the software repository.
 
 ## Presentation certificate
 

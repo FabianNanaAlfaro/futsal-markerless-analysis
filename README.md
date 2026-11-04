@@ -5,16 +5,14 @@
 
 <p align="center"><img src="site/assets/brand/tehealp-logo.png" width="280" alt="TeHealP logo"></p>
 
-A Python library and command-line tool for lower-limb pose processing and kicking kinematics. It implements the reusable stages described in *Implementación y validación de algoritmos de inteligencia artificial para analizar la asimetría en el movimiento del pateo en futsal*: homologation of four functional landmarks, multi-camera DLT, temporal processing, 3D velocities, sagittal knee and ankle angles, bilateral metrics, and analysis exports.
-
-The project supports four distinct 2D sources: manual DVIDEOW tracking as the reference, Sports2D, MediaPipe Pose, and five DeepLabCut PyTorch configurations. The reference and markerless routes remain separately identified in the output metadata.
+A Python package and command-line tool for lower-limb pose processing and futsal-kicking kinematics. It supports manual DVIDEOW tracks and pose estimates from Sports2D, MediaPipe Pose, and the five DeepLabCut configurations evaluated in the thesis.
 
 ## Capabilities
 
 - Installable Python package with reusable functions and the `futsal-markerless` CLI.
 - MediaPipe Pose extraction for a user-selected side, optional camera-specific ROI, and explicit mapping of cropped coordinates back to the original pixels.
 - Sports2D Python API adapter using a user-supplied TOML configuration.
-- DeepLabCut inference for the five thesis checkpoints, once a model bundle and DeepLabCut environment are available.
+- DeepLabCut inference for a selected thesis configuration when a compatible local model bundle and DeepLabCut environment are supplied.
 - Anatomical homologation to hip, knee, ankle, and foot.
 - User-supplied projection matrices or 11-coefficient DLT calibrations for 3D reconstruction.
 - Hampel-based 2D outlier removal, PCHIP interpolation of gaps up to five frames, linear fallback, and Savitzky–Golay smoothing for markerless tracks.
@@ -59,7 +57,7 @@ For DeepLabCut, install the compatible PyTorch and torchvision builds first, the
 python -m pip install ".[dlc]"
 ```
 
-MediaPipe is pinned to 0.10.21 to match the thesis route. DeepLabCut 3.0.1 supports Python 3.10–3.12. The tested Sports2D runtime uses PyTorch 2.5.1 and torchvision 0.20.1 on CPU; for CUDA, select matching wheels with the official [PyTorch selector](https://pytorch.org/get-started/locally/). The DLC bundles were verified with PyTorch 2.5.1+cu121 and torchvision 0.20.1+cu121. See the official [DeepLabCut installation guide](https://deeplabcut.github.io/DeepLabCut/docs/installation.html). Sports2D is pinned to the tested 0.8.20 interface. Install the optional statistics dependency with `python -m pip install ".[spm]"` when SPM1D analysis is needed.
+MediaPipe is pinned to 0.10.21 to match the thesis route. DeepLabCut 3.0.1 supports Python 3.10–3.12. The tested Sports2D runtime uses PyTorch 2.5.1 and torchvision 0.20.1 on CPU; for CUDA, select matching wheels with the official [PyTorch selector](https://pytorch.org/get-started/locally/). The verified DeepLabCut inference environment used PyTorch 2.5.1+cu121 and torchvision 0.20.1+cu121. See the official [DeepLabCut installation guide](https://deeplabcut.github.io/DeepLabCut/docs/installation.html). Sports2D is pinned to the tested 0.8.20 interface. Install the optional statistics dependency with `python -m pip install ".[spm]"` when SPM1D analysis is needed.
 
 ## Run the synthetic example
 
@@ -132,24 +130,24 @@ The thesis benchmark used one participant-level training/validation split, one e
 | RTMPose-M | 28 | 15.54 | 14.58 |
 | RTMPose-X | 4 | 15.62 | 15.83 |
 
-These are single-run results on the study’s selection partition. ResNet-101 was selected for the integrated analysis using the thesis criterion; the benchmark does not establish a general architecture ranking. Downloadable model bundles, checkpoint hashes and setup instructions are listed in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md).
+These are single-run results on the study’s selection partition. ResNet-101 was selected for the integrated analysis using the thesis criterion; the benchmark does not establish a general architecture ranking. The configurations, checkpoint identifiers, hashes and inference settings are recorded in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md) and the portable YAML files under [`configs/deeplabcut/benchmark`](configs/deeplabcut/benchmark). Trained checkpoint files are not distributed with the repository or its Releases.
 
-Example inference after installing DeepLabCut and extracting a model release bundle:
+Example inference with a compatible model bundle already available on the local computer:
 
 ```powershell
 futsal-markerless pose-dlc `
-  --model ResNet-101 --model-bundle models\ResNet-101 `
+  --model ResNet-101 --model-bundle .\study-models\ResNet-101 `
   --video new_kick.mp4 --camera CAM_1 --device cuda:0 `
   --batch-size 1 --output predictions
 ```
 
-The DLC adapter verifies both checkpoint hashes, selects the thesis pose and detector snapshots, retains native DeepLabCut outputs and writes `<video>_tracks_2d.csv` in the common schema. Give each run a new or empty output directory so DeepLabCut cannot reuse older predictions. Run each synchronized camera view separately and provide both standardized CSV files to the reconstruction command.
+The DLC adapter verifies the pose checkpoint hash against the thesis registry and supplied bundle metadata, and the detector hash against the supplied bundle metadata. It selects the pose and detector snapshots, retains native DeepLabCut outputs and writes `<video>_tracks_2d.csv` in the common schema. Give each run a new or empty output directory so DeepLabCut cannot reuse older predictions. Run each synchronized camera view separately and provide both standardized CSV files to the reconstruction command.
 
 ## Biomechanical processing
 
 The 3D coordinate frame follows the thesis: X anterior–posterior, Y mediolateral, and Z vertical. The sagittal joint angles use the X–Z projection, +X anterior, and +Z upward. Knee extension is 0°; flexion is positive and hyperextension negative. Ankle neutral is 0°; dorsiflexion is positive and plantarflexion negative. Speeds are 3D vector magnitudes, and angular velocity is derived using the physical sampling interval before phase normalization.
 
-The signed speed symmetry index is `200 × (D − ND) / (D + ND)`. Knee and ankle angle and angular-velocity differences are signed `D − ND`. The thesis contains conflicting wording about whether the speed index is non-negative; the implementation follows its displayed signed equation and the result interpretation, and records that discrepancy in [`docs/reproducibility-notes.md`](docs/reproducibility-notes.md).
+The signed speed symmetry index is `200 × (D − ND) / (D + ND)`, where D and ND are non-negative speed magnitudes. Positive values indicate greater speed in the dominant leg, negative values indicate greater speed in the non-dominant leg, and zero indicates equal magnitudes. Knee and ankle angle and angular-velocity differences are signed `D − ND`.
 
 The Python DLT routine accepts calibration matrices supplied by the researcher. Its output is not represented as bitwise or numerical reproduction of DVIDEOW’s legacy implementation; the reconstruction path must be checked against a researcher’s calibration and reference outputs for each study.
 
@@ -161,7 +159,24 @@ Use `futsal-markerless bilateral --dominant dominant.csv --non-dominant non_domi
 
 ## Reuse and fine-tuning
 
-Use the numerical modules directly from `futsal_markerless_analysis` or adapt the CSV schema to another markerless estimator. The five DeepLabCut bundles preserve each selected PyTorch checkpoint, inference configuration, landmark names and available training settings. Fine-tuning requires new annotations and the compatible DeepLabCut/PyTorch environment; the trained checkpoints are starting weights, not a supplied training dataset. The training software versions were not recorded in the source project files; the verified inference environment is listed in the model documentation.
+Use the numerical modules directly from `futsal_markerless_analysis` or adapt the CSV schema to another markerless estimator. The DeepLabCut registry preserves the five benchmark configurations, checkpoint identifiers and hashes, inference settings, landmark names and reported training metadata. Checkpoint weights and the annotated training dataset are not distributed. Inference and fine-tuning require compatible local model files, new annotations as needed, and the corresponding DeepLabCut/PyTorch environment. The original training software versions were not recorded in the source project files; the verified inference environment is listed in the model documentation.
+
+## Authors, laboratory, and citation
+
+**Developed by TeHealP@PUCP.** Fabian Alcides Ñaña Alfaro and Luiz Henrique Palucci Vieira are TeHealP@PUCP members linked to this project. The six software authors below are listed in citation order.
+
+| Author | Affiliation(s) | ORCID |
+| --- | --- | --- |
+| Fabian Alcides Ñaña Alfaro | TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | [0009-0000-7881-1223](https://orcid.org/0009-0000-7881-1223) |
+| Paulo Roberto Pereira Santiago | School of Physical Education and Sport of Ribeirão Preto, University of São Paulo, Ribeirão Preto, Brazil | [0000-0002-9460-8847](https://orcid.org/0000-0002-9460-8847) |
+| Bruno Luiz de Souza Bedo | School of Physical Education and Sport, University of São Paulo, São Paulo, Brazil | [0000-0003-3821-2327](https://orcid.org/0000-0003-3821-2327) |
+| Rodrigo Leal de Queiroz Thomaz de Aquino | Federal University of Espírito Santo, Vitória, Brazil; Brazilian National Football Confederation, Rio de Janeiro, Brazil | [0000-0002-4885-7316](https://orcid.org/0000-0002-4885-7316) |
+| Luiz Henrique Palucci Vieira | TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | [0000-0001-6981-756X](https://orcid.org/0000-0001-6981-756X) |
+| César Armando Beltrán Castañón | Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | — |
+
+Use the software citation in [`CITATION.md`](CITATION.md) or [`CITATION.cff`](CITATION.cff). The related publication, *Preliminary analysis of markerless three-dimensional trajectory reconstruction during the futsal instep kicking using Sports2D*, retains its original five authors: Fabian A. Nana, Paulo R. P. Santiago, Bruno L. S. Bedo, Rodrigo Aquino, and Luiz H. Palucci Vieira ([DOI](https://doi.org/10.1080/14763141.2026.2680520)). It is a separate citation from the six-author software record.
+
+The package code is MIT licensed; its copyright notice is in [`LICENSE`](LICENSE). TeHealP@PUCP is identified as the developing laboratory, separately from the software authors and copyright statement. See [`NOTICE.md`](NOTICE.md) for third-party software and institutional-mark terms.
 
 ## Documentation and references
 
@@ -173,4 +188,4 @@ Use the numerical modules directly from `futsal_markerless_analysis` or adapt th
 - [Reproducibility notes](docs/reproducibility-notes.md)
 - [Sources and citations](docs/sources.md)
 
-The Python package, documentation, examples and five trained model bundles are MIT-licensed. External pose-estimation software and its dependencies retain their own terms. See [`NOTICE.md`](NOTICE.md) and cite the methods and systems listed in [`CITATION.cff`](CITATION.cff).
+The Python package, documentation and examples are MIT-licensed. DeepLabCut weights are not distributed by this repository. External pose-estimation software, model artifacts and institutional marks retain their own terms. See [`NOTICE.md`](NOTICE.md) and cite the software and related work listed in [`CITATION.cff`](CITATION.cff).

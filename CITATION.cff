@@ -4,29 +4,37 @@ title: "Futsal Markerless Analysis"
 version: "0.2.0"
 date-released: 2026-11-04
 abstract: >-
-  Installable Python library and command-line tool for lower-limb pose
-  processing, camera-calibrated DLT reconstruction and kicking kinematics,
-  implementing the reusable methods described in a futsal markerless-motion
-  thesis. Includes five thesis-trained DeepLabCut checkpoints and a synthetic
-  end-to-end example.
+  Developed by TeHealP@PUCP, this installable Python library and command-line
+  tool implements lower-limb pose processing, camera-calibrated DLT
+  reconstruction and futsal-kicking kinematics from the thesis methods. It
+  records five trained DeepLabCut configurations and includes a synthetic
+  end-to-end example. Trained checkpoint weights are not distributed.
 authors:
-  - family-names: "Nana Alfaro"
+  - family-names: "Ñaña Alfaro"
     given-names: "Fabian Alcides"
+    alias: "Fabian A. Nana"
+    affiliation: "TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú"
     orcid: "https://orcid.org/0009-0000-7881-1223"
-  - family-names: "Palucci Vieira"
-    given-names: "Luiz Henrique"
-    orcid: "https://orcid.org/0000-0001-6981-756X"
-  - family-names: "Beltrán Castañón"
-    given-names: "Cesar Armando"
   - family-names: "Santiago"
     given-names: "Paulo Roberto Pereira"
+    affiliation: "School of Physical Education and Sport of Ribeirão Preto, University of São Paulo, Ribeirão Preto, Brazil"
     orcid: "https://orcid.org/0000-0002-9460-8847"
   - family-names: "Bedo"
     given-names: "Bruno Luiz de Souza"
+    affiliation: "School of Physical Education and Sport, University of São Paulo, São Paulo, Brazil"
     orcid: "https://orcid.org/0000-0003-3821-2327"
-  - family-names: "Aquino"
-    given-names: "Rodrigo Leal de Queiroz Thomaz de"
+  - family-names: "Thomaz de Aquino"
+    given-names: "Rodrigo Leal de Queiroz"
+    alias: "Rodrigo Aquino"
+    affiliation: "Federal University of Espírito Santo, Vitória, Brazil; Brazilian National Football Confederation, Rio de Janeiro, Brazil"
     orcid: "https://orcid.org/0000-0002-4885-7316"
+  - family-names: "Palucci Vieira"
+    given-names: "Luiz Henrique"
+    affiliation: "TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú"
+    orcid: "https://orcid.org/0000-0001-6981-756X"
+  - family-names: "Beltrán Castañón"
+    given-names: "César Armando"
+    affiliation: "Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú"
 keywords:
   - biomechanics
   - futsal

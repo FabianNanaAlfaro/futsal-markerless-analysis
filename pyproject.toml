@@ -9,7 +9,14 @@ description = "Reusable markerless pose and biomechanical analysis methods from 
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 license = "MIT"
-authors = [{ name = "Fabian A. Nana" }]
+authors = [
+  { name = "Fabian Alcides Ñaña Alfaro" },
+  { name = "Paulo Roberto Pereira Santiago" },
+  { name = "Bruno Luiz de Souza Bedo" },
+  { name = "Rodrigo Leal de Queiroz Thomaz de Aquino" },
+  { name = "Luiz Henrique Palucci Vieira" },
+  { name = "César Armando Beltrán Castañón" },
+]
 dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2"]
 classifiers = [
   "Development Status :: 3 - Alpha",
