@@ -29,14 +29,21 @@
       </div>
     </div>
     <nav class="site-nav shell" aria-label="Project sections">
-      <a href="#overview">Overview</a>
-      <a href="#workflow">Workflow</a>
-      <a href="#pose-systems">Pose systems</a>
-      <a href="#benchmark">DLC benchmark</a>
-      <a href="#methods">Biomechanics</a>
-      <a href="#documentation">Documentation</a>
-      <a href="#authors">Authors</a>
-      <a href="#citation">Citation</a>
+      <details class="nav-details" open>
+        <summary>Explore sections</summary>
+        <div class="nav-links">
+          <a href="#overview">Overview</a>
+          <a href="#quick-start">Quick start</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#pose-systems">Pose systems</a>
+          <a href="#benchmark">DLC benchmark</a>
+          <a href="#methods">Biomechanics</a>
+          <a href="#data">Data</a>
+          <a href="#documentation">Documentation</a>
+          <a href="#authors">Authors</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </details>
     </nav>
   </header>
 
@@ -45,6 +52,7 @@
       <p class="contents-title">CONTENTS</p>
       <ol>
         <li><a href="#overview">Project overview</a></li>
+        <li><a href="#quick-start">Quick start</a></li>
         <li><a href="#workflow">Processing workflow</a></li>
         <li><a href="#software">Install and run</a></li>
         <li><a href="#pose-systems">Pose systems</a></li>
@@ -62,13 +70,24 @@
       <section id="overview" class="document-section overview" aria-labelledby="page-title">
         <div class="eyebrow-row">
           <span>RESEARCH SOFTWARE</span>
-          <span>VERSION 0.2.0</span>
+          <span>VERSION 0.2.1</span>
           <span>MIT LICENSE</span>
         </div>
         <h1 id="page-title">Futsal Markerless Analysis</h1>
         <p class="lead">A Python package and command-line tool for lower-limb pose processing, calibrated three-dimensional reconstruction and kinematic analysis of the futsal instep kick.</p>
-        <p class="byline"><strong>Developed by TeHealP@PUCP.</strong> The software implements the thesis workflow and keeps manual DVIDEOW reference tracks separate from Sports2D, MediaPipe Pose and DeepLabCut estimates.</p>
-
+        <p class="byline"><strong>Developed by TeHealP@PUCP.</strong> Manual DVIDEOW tracking is the reference for Sports2D, MediaPipe Pose and DeepLabCut estimates.</p>
+        <section id="quick-start" class="quick-start" aria-labelledby="quick-start-title">
+          <div>
+            <p class="section-kicker">QUICK START</p>
+            <h2 id="quick-start-title">Install and run the example</h2>
+            <p>Start with a synthetic trial to see the complete command-line workflow and exported files.</p>
+          </div>
+          <pre class="code-block"><code>git clone https://github.com/FabianNanaAlfaro/futsal-markerless-analysis.git
+cd futsal-markerless-analysis
+python -m pip install .
+futsal-markerless demo --output demo-output --frames 64</code></pre>
+          <a class="quick-start-link" href="#software">See installation options and pose-system commands ↗</a>
+        </section>
         <dl class="project-facts">
           <div><dt>Language</dt><dd>Python 3.10–3.12</dd></div>
           <div><dt>Pose routes</dt><dd>Sports2D · MediaPipe · DeepLabCut</dd></div>
@@ -166,10 +185,6 @@ futsal-markerless pose-mediapipe \
             </tbody>
           </table>
         </div>
-        <figure class="anatomy-figure">
-          <img src="assets/halpe-26-keypoints.svg" alt="Halpe-26 whole-body keypoint diagram used by the Sports2D body-with-feet model" width="1080" height="680" loading="lazy">
-          <figcaption>Halpe-26 keypoint scheme used in the Sports2D body-with-feet route.</figcaption>
-        </figure>
       </section>
 
       <section id="benchmark" class="document-section" aria-labelledby="benchmark-title">
@@ -264,7 +279,7 @@ futsal-markerless pose-mediapipe \
               <tr><th scope="row">Bruno Luiz de Souza Bedo</th><td>School of Physical Education and Sport, University of São Paulo, São Paulo, Brazil.</td><td><a href="https://orcid.org/0000-0003-3821-2327">ORCID ↗</a></td></tr>
               <tr><th scope="row">Rodrigo Leal de Queiroz Thomaz de Aquino</th><td>Federal University of Espírito Santo, Vitória, Brazil; Brazilian National Football Confederation, Rio de Janeiro, Brazil.</td><td><a href="https://orcid.org/0000-0002-4885-7316">ORCID ↗</a></td></tr>
               <tr><th scope="row">Luiz Henrique Palucci Vieira</th><td>TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td><a href="https://orcid.org/0000-0001-6981-756X">ORCID ↗</a></td></tr>
-              <tr><th scope="row">César Armando Beltrán Castañón</th><td>Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td>—</td></tr>
+              <tr><th scope="row">César Armando Beltrán Castañón</th><td>Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú.</td><td><a href="https://orcid.org/0000-0002-0173-4140">ORCID ↗</a></td></tr>
             </tbody>
           </table>
         </div>
@@ -277,7 +292,7 @@ futsal-markerless pose-mediapipe \
         </div>
         <div class="citation-block">
           <p class="citation-label">Software · APA 7</p>
-          <p class="citation-text">Nana, F. A., Santiago, P. R. P., Bedo, B. L. S., Aquino, R., Palucci Vieira, L. H., &amp; Beltrán Castañón, C. A. (2026). <em>Futsal Markerless Analysis</em> (Version 0.2.0) [Computer software]. GitHub.</p>
+          <p class="citation-text">Nana, F. A., Santiago, P. R. P., Bedo, B. L. S., Aquino, R., Palucci Vieira, L. H., &amp; Beltrán Castañón, C. A. (2026). <em>Futsal Markerless Analysis</em> (Version 0.2.1) [Computer software]. GitHub.</p>
           <a href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/CITATION.cff">Machine-readable citation ↗</a>
         </div>
         <div class="related-work">

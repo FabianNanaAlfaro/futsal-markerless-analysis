@@ -2,6 +2,8 @@ const themeButton = document.querySelector("#theme-toggle");
 const themeColor = document.querySelector('meta[name="theme-color"]');
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const themeStorageKey = "futsal-markerless-analysis-theme";
+const sectionMenu = document.querySelector(".nav-details");
+const compactLayout = window.matchMedia("(max-width: 760px)");
 
 function getStoredTheme() {
   try {
@@ -38,6 +40,11 @@ function applyTheme(theme, savePreference = false) {
 }
 
 applyTheme(getStoredTheme());
+function syncSectionMenu() {
+  sectionMenu.open = !compactLayout.matches;
+}
+syncSectionMenu();
+compactLayout.addEventListener("change", syncSectionMenu);
 themeButton.addEventListener("click", () => {
   const currentTheme =
     getStoredTheme() ||

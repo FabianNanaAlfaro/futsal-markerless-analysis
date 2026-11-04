@@ -2,7 +2,7 @@
 
 ## APA 7
 
-Nana, F. A., Santiago, P. R. P., Bedo, B. L. S., Aquino, R., Palucci Vieira, L. H., & Beltrán Castañón, C. A. (2026). *Futsal Markerless Analysis* (Version 0.2.0) [Computer software]. GitHub. https://github.com/FabianNanaAlfaro/futsal-markerless-analysis
+Nana, F. A., Santiago, P. R. P., Bedo, B. L. S., Aquino, R., Palucci Vieira, L. H., & Beltrán Castañón, C. A. (2026). *Futsal Markerless Analysis* (Version 0.2.1) [Computer software]. GitHub. https://github.com/FabianNanaAlfaro/futsal-markerless-analysis
 
 The software authorship and affiliation records are available in [`CITATION.cff`](CITATION.cff). Fabian Alcides Ñaña Alfaro is cited in the established publication form Fabian A. Nana.
 
@@ -17,7 +17,7 @@ The software authorship and affiliation records are available in [`CITATION.cff`
             Palucci Vieira, Luiz Henrique and
             Beltrán Castañón, César Armando},
   title = {Futsal Markerless Analysis},
-  version = {0.2.0},
+  version = {0.2.1},
   year = {2026},
   url = {https://github.com/FabianNanaAlfaro/futsal-markerless-analysis},
   license = {MIT}

@@ -75,7 +75,10 @@ p { margin: 0 0 1.1em; }
 :root[data-theme="dark"] .pucp-logo .logo-light { display: none !important; }
 .theme-toggle { border: 1px solid var(--line-strong); padding: 6px 9px; color: var(--ink); background: transparent; font: inherit; font-size: 11px; white-space: nowrap; cursor: pointer; }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.site-nav { display: flex; align-items: center; gap: 22px; min-height: 42px; border-top: 1px solid var(--line); overflow-x: auto; }
+.site-nav { min-height: 42px; border-top: 1px solid var(--line); }
+.nav-details { min-height: 42px; }
+.nav-details > summary { display: none; }
+.nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; min-height: 42px; }
 .site-nav a { flex: 0 0 auto; color: var(--muted); font-size: 12px; text-decoration: none; }
 .site-nav a:hover, .site-nav a:focus-visible { color: var(--accent); text-decoration: underline; }
 .page-layout { display: grid; grid-template-columns: 188px minmax(0, 1fr); gap: 58px; align-items: start; padding-top: 37px; padding-bottom: 96px; }
@@ -102,6 +105,11 @@ h3 { margin: 0 0 9px; font-size: 19px; }
 .project-facts div { padding: 11px 13px 12px 0; }
 .project-facts dt { color: var(--faint); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 .project-facts dd { margin: 3px 12px 0 0; font-size: 12px; line-height: 1.45; }
+.quick-start { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; margin-top: 22px; padding: 15px 0 4px; border-top: 1px solid var(--line-strong); }
+.quick-start h2 { margin: 0 0 4px; font-size: 20px; }
+.quick-start p { max-width: 630px; margin-bottom: 6px; color: var(--muted); font-size: 12px; }
+.quick-start .code-block { margin: 4px 0 0; }
+.quick-start-link { justify-self: start; font-size: 12px; }
 .section-heading { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; align-items: start; margin: 0 0 21px; }
 .section-number { padding-top: 5px; color: var(--accent); font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; }
 .section-kicker { margin: 0 0 5px; color: var(--faint); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .1em; }
@@ -137,9 +145,6 @@ h3 { margin: 0 0 9px; font-size: 19px; }
 .technical-table td { color: var(--muted); }
 .benchmark-table { min-width: 680px; font-variant-numeric: tabular-nums; }
 .benchmark-table td:not(:first-child) { text-align: right; }
-.anatomy-figure { width: min(100%, 560px); margin: 22px auto 0; padding: 10px; border: 1px solid var(--line); background: #fff; }
-.anatomy-figure img { display: block; width: 100%; height: auto; }
-.anatomy-figure figcaption { padding: 8px 4px 2px; color: #4f5b60; font-size: 10px; }
 .document-links { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
 .document-links li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; padding: 8px 2px; border-bottom: 1px solid var(--line); }
 .document-links a { font-size: 12px; }
@@ -177,15 +182,14 @@ h3 { margin: 0 0 9px; font-size: 19px; }
   .institution-lockup { width: 100%; justify-content: flex-start; gap: 15px; }
   .tehealp-logo { width: 122px; height: 43px; }
   .pucp-logo { width: 100px; height: 43px; }
-  .site-nav { flex-wrap: wrap; gap: 5px 17px; min-height: 0; overflow: visible; padding-block: 8px; }
+  .site-nav { padding-block: 7px; }
+  .nav-details > summary { display: block; min-height: 28px; padding: 4px 0; color: var(--muted); font-size: 12px; cursor: pointer; list-style: none; }
+  .nav-details > summary::-webkit-details-marker { display: none; }
+  .nav-details > summary::after { margin-left: 7px; color: var(--accent); content: "＋"; }
+  .nav-details[open] > summary::after { content: "−"; }
+  .nav-links { min-height: 0; flex-wrap: wrap; gap: 5px 17px; padding: 7px 0 3px; }
   .page-layout { display: block; padding-top: 22px; padding-bottom: 55px; }
-  .contents { position: static; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--line-strong); }
-  .contents-title { margin-bottom: 6px; }
-  .contents ol { display: flex; flex-wrap: wrap; gap: 0 15px; }
-  .contents li, .contents li:last-child { border: 0; }
-  .contents li a { padding: 4px 0; font-size: 10px; }
-  .contents li a::before { content: none; }
-  .contents-repo { margin-top: 8px; }
+  .contents { display: none; }
   .document { max-width: none; }
 }
 @media (max-width: 560px) {
@@ -196,7 +200,7 @@ h3 { margin: 0 0 9px; font-size: 19px; }
   .tehealp-logo { width: 108px; }
   .pucp-logo { width: 84px; }
   .theme-toggle { margin-left: auto; padding-inline: 7px; font-size: 10px; }
-  .site-nav { gap: 4px 15px; }
+  .nav-links { gap: 4px 15px; }
   .site-nav a { font-size: 11px; }
   .page-layout { padding-top: 15px; }
   .document-section { padding: 25px 0 30px; }
@@ -222,7 +226,6 @@ h3 { margin: 0 0 9px; font-size: 19px; }
   .pose-system-table tbody th { grid-column: 1 / -1; width: auto; padding: 12px 8px 3px; border-bottom: 0; }
   .pose-system-table tbody td { min-width: 0; padding: 5px 8px 12px; border-bottom: 0; }
   .pose-system-table tbody td::before { display: block; margin-bottom: 4px; color: var(--faint); font-family: "SFMono-Regular", Consolas, monospace; font-size: 8px; letter-spacing: .04em; text-transform: uppercase; content: attr(data-label); }
-  .anatomy-figure { padding: 6px; }
   .document-links li { gap: 7px; }
   .document-links a { font-size: 11px; }
   .footer-inner { display: grid; gap: 14px; }

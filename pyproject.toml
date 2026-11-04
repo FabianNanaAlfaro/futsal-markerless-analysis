@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "futsal-markerless-analysis"
-version = "0.2.0"
+version = "0.2.1"
 description = "Reusable markerless pose and biomechanical analysis methods from a futsal kicking thesis"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"

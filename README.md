@@ -3,7 +3,13 @@
 [![CI](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/code-MIT-2ea44f)](LICENSE)
 
-<p align="center"><img src="site/assets/brand/tehealp-logo.png" width="280" alt="TeHealP logo"></p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/FabianNanaAlfaro/futsal-markerless-analysis/main/site/assets/brand/tehealp-logo.png#gh-light-mode-only" width="280" alt="TeHealP logo, light theme">
+  <img src="https://raw.githubusercontent.com/FabianNanaAlfaro/futsal-markerless-analysis/main/site/assets/brand/tehealp-logo-white.svg#gh-dark-mode-only" width="280" alt="TeHealP logo, dark theme">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/FabianNanaAlfaro/futsal-markerless-analysis/main/site/assets/brand/pucp-logo-color.png#gh-light-mode-only" width="150" alt="Pontificia Universidad Católica del Perú logo, light theme">
+  <img src="https://raw.githubusercontent.com/FabianNanaAlfaro/futsal-markerless-analysis/main/site/assets/brand/pucp-logo-white.svg#gh-dark-mode-only" width="150" alt="Pontificia Universidad Católica del Perú logo, dark theme">
+</p>
 
 A Python package and command-line tool for lower-limb pose processing and futsal-kicking kinematics. It supports manual DVIDEOW tracks and pose estimates from Sports2D, MediaPipe Pose, and the five DeepLabCut configurations evaluated in the thesis.
 
@@ -172,7 +178,7 @@ Use the numerical modules directly from `futsal_markerless_analysis` or adapt th
 | Bruno Luiz de Souza Bedo | School of Physical Education and Sport, University of São Paulo, São Paulo, Brazil | [0000-0003-3821-2327](https://orcid.org/0000-0003-3821-2327) |
 | Rodrigo Leal de Queiroz Thomaz de Aquino | Federal University of Espírito Santo, Vitória, Brazil; Brazilian National Football Confederation, Rio de Janeiro, Brazil | [0000-0002-4885-7316](https://orcid.org/0000-0002-4885-7316) |
 | Luiz Henrique Palucci Vieira | TeHealP@PUCP; Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | [0000-0001-6981-756X](https://orcid.org/0000-0001-6981-756X) |
-| César Armando Beltrán Castañón | Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | — |
+| César Armando Beltrán Castañón | Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú | [0000-0002-0173-4140](https://orcid.org/0000-0002-0173-4140) |
 
 Use the software citation in [`CITATION.md`](CITATION.md) or [`CITATION.cff`](CITATION.cff). The related publication, *Preliminary analysis of markerless three-dimensional trajectory reconstruction during the futsal instep kicking using Sports2D*, retains its original five authors: Fabian A. Nana, Paulo R. P. Santiago, Bruno L. S. Bedo, Rodrigo Aquino, and Luiz H. Palucci Vieira ([DOI](https://doi.org/10.1080/14763141.2026.2680520)). It is a separate citation from the six-author software record.
 

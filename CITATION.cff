@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If this public pipeline is useful, cite the repository and the related preliminary work separately."
 title: "Futsal Markerless Analysis"
-version: "0.2.0"
+version: "0.2.1"
 date-released: 2026-11-04
 abstract: >-
   Developed by TeHealP@PUCP, this installable Python library and command-line
@@ -35,6 +35,7 @@ authors:
   - family-names: "Beltrán Castañón"
     given-names: "César Armando"
     affiliation: "Grupo de Inteligencia Artificial PUCP (IA-PUCP); Departamento Académico de Ingeniería, Pontificia Universidad Católica del Perú, Lima, Perú"
+    orcid: "https://orcid.org/0000-0002-0173-4140"
 keywords:
   - biomechanics
   - futsal
