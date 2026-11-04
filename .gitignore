@@ -8,6 +8,9 @@ calibrations/
 weights/
 checkpoints/
 models/
+!src/sports2d_dvideow_pipeline/models/
+src/sports2d_dvideow_pipeline/models/*
+!src/sports2d_dvideow_pipeline/models/registry.json
 *.avi
 *.mp4
 *.mov
