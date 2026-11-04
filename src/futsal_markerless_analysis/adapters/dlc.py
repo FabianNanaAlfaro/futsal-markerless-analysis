@@ -34,10 +34,25 @@ def _bundle_paths(model_name: str, bundle: Path, model: dict, metadata: dict) ->
         if not path.is_file():
             raise FileNotFoundError(f"incomplete model bundle; missing {path.name}")
     if _sha256(checkpoint) != model["sha256"] or _sha256(checkpoint) != metadata["selected_checkpoint_sha256"]:
-        raise ValueError("pose checkpoint SHA-256 does not match the published model metadata")
+        raise ValueError("pose checkpoint SHA-256 does not match the thesis model registry or supplied bundle metadata")
     if _sha256(detector) != metadata["detector_checkpoint_sha256"]:
         raise ValueError("person-detector checkpoint SHA-256 does not match the model metadata")
     return config_yaml, checkpoint, detector
+
+
+def _snapshot_index_for_checkpoint(snapshots, checkpoint: Path) -> int:
+    """Resolve a DLC snapshot index from the exact checkpoint path in the registry."""
+    checkpoint = checkpoint.resolve()
+    matches = [
+        index
+        for index, snapshot in enumerate(snapshots)
+        if Path(snapshot.path).resolve() == checkpoint
+    ]
+    if len(matches) != 1:
+        raise ValueError(
+            f"expected exactly one DeepLabCut snapshot for {checkpoint.name}, found {len(matches)}"
+        )
+    return matches[0]
 
 
 def _standardize_dlc_csv(csv_path: Path, output_csv: Path, *, camera: str) -> int:
@@ -116,13 +131,20 @@ def analyze(
         metadata = json.loads((bundle / "model_metadata.json").read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise FileNotFoundError("model bundle is missing a readable model_metadata.json") from exc
-    config_yaml, _, _ = _bundle_paths(model_name, bundle, models[model_name], metadata)
+    config_yaml, checkpoint, detector = _bundle_paths(model_name, bundle, models[model_name], metadata)
 
     try:
         import deeplabcut
         import yaml
+        from deeplabcut.pose_estimation_pytorch.apis.utils import get_model_snapshots
+        from deeplabcut.pose_estimation_pytorch.task import Task
     except ImportError as exc:
         raise RuntimeError("install DeepLabCut in a dedicated Python 3.10–3.12 environment") from exc
+
+    pose_snapshots = get_model_snapshots("all", checkpoint.parent, Task.TOP_DOWN)
+    detector_snapshots = get_model_snapshots("all", detector.parent, Task.DETECT)
+    pose_snapshot_index = _snapshot_index_for_checkpoint(pose_snapshots, checkpoint)
+    detector_snapshot_index = _snapshot_index_for_checkpoint(detector_snapshots, detector)
 
     output_dir = Path(output_dir).resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
@@ -145,10 +167,10 @@ def analyze(
             shuffle=int(models[model_name]["shuffle"]),
             trainingsetindex=0,
             engine=deeplabcut.Engine.PYTORCH,
+            snapshot_index=pose_snapshot_index,
+            detector_snapshot_index=detector_snapshot_index,
             save_as_csv=True,
             destfolder=str(output_dir),
-            snapshot_index=-1,
-            detector_snapshot_index=-1,
             dynamic=(False, 0.5, 10),
             device=device,
             batch_size=batch_size,

@@ -1,0 +1,44 @@
+{
+  "model": "RTMPose-X",
+  "architecture": "rtmpose_x",
+  "iteration": 0,
+  "shuffle": 103,
+  "selected_epoch": 4,
+  "selected_checkpoint": "snapshot-best-004.pt",
+  "selected_checkpoint_sha256": "4B39C184CCA4144158206012513F05BA04C144CB2308DC5B2D3DA6E30B336AC4",
+  "detector_checkpoint": "snapshot-detector-best-020.pt",
+  "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+  "checkpoint_size_bytes": 587868813,
+  "detector_size_bytes": 9147098,
+  "weights_included_in_bundle": false,
+  "training_fraction": 0.730588,
+  "inference_pcutoff_for_reported_metrics": 0.6,
+  "bodyparts": [
+    "caderaDer",
+    "caderaIzq",
+    "rodillaDer",
+    "rodillaIzq",
+    "tobilloDer",
+    "tobilloIzq",
+    "pieDer",
+    "pieIzq"
+  ],
+  "source_model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle103",
+  "training_software_versions_recorded": false,
+  "bundle_creation_environment": {
+    "deeplabcut": null,
+    "torch": null,
+    "torchvision": null
+  },
+  "selection_validation": {
+    "rmse_px": 15.62,
+    "rmse_at_pcutoff_px": 15.83,
+    "mAP": 61.29,
+    "mAR": 75.06
+  },
+  "benchmark_scope": "exploratory benchmark; selected checkpoints are not evidence of a universal architecture ranking",
+  "training_data_and_labels_included": false,
+  "source_project_snapshotindex_default": -1,
+  "source_project_detector_snapshotindex_default": -1,
+  "runtime_checkpoint_selection": "Exact registered pose and detector filenames are resolved to current DeepLabCut snapshot indexes at inference time."
+}

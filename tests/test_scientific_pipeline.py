@@ -14,6 +14,7 @@ from futsal_markerless_analysis.geometry import load_projection_matrices, triang
 from futsal_markerless_analysis.kinematics import (
     ankle_dorsiflexion_angle,
     angular_velocity,
+    bilateral_difference,
     knee_flexion_angle,
     signed_symmetry_index,
     vector_velocity,
@@ -47,14 +48,15 @@ class ScientificPipelineTests(unittest.TestCase):
         self.assertIsNone(homologate_landmark("RIGHT_KNEE", "left"))
         self.assertEqual(homologate_landmark("L_Ankle", "left"), "ankle")
 
-    def test_knee_extension_flexion_and_hyperextension_sign(self):
-        hip = np.array([[0.0, 0.0, 1.0]] * 3)
-        knee = np.array([[0.0, 0.0, 0.5]] * 3)
-        ankle = np.array([[0.0, 0.0, 0.0], [0.2, 0.0, 0.15], [-0.1, 0.0, 0.1]])
-        result = knee_flexion_angle(hip, knee, ankle)
-        self.assertAlmostEqual(result[0], 0.0, places=8)
-        self.assertGreater(result[1], 0.0)
-        self.assertLess(result[2], 0.0)
+    def test_knee_angle_matches_documented_sagittal_geometry(self):
+        # H=(0,0,1), K=(0,0,0), A=(-sin(theta),0,-cos(theta));
+        # +X is anterior, so posterior ankle displacement gives positive flexion.
+        expected = np.array([0.0, 30.0, 45.0, 90.0, -10.0])
+        radians = np.deg2rad(expected)
+        hip = np.tile([0.0, 0.0, 1.0], (len(expected), 1))
+        knee = np.zeros((len(expected), 3))
+        ankle = np.column_stack((-np.sin(radians), np.zeros(len(expected)), -np.cos(radians)))
+        np.testing.assert_allclose(knee_flexion_angle(hip, knee, ankle), expected, atol=1e-10)
 
     def test_ankle_neutral_dorsiflexion_and_plantarflexion_sign(self):
         knee = np.array([[0.0, 0.0, 1.0]] * 3)
@@ -72,6 +74,29 @@ class ScientificPipelineTests(unittest.TestCase):
         self.assertTrue(np.isnan(velocity[3]).all())
         angular = angular_velocity([0.0, 10.0, 20.0], 10.0)
         np.testing.assert_allclose(angular, [100.0, 100.0, 100.0])
+
+    def test_angular_velocity_unwraps_the_minus_180_to_180_boundary(self):
+        result = angular_velocity([170.0, 179.0, -179.0, -170.0], sampling_hz=10.0)
+        np.testing.assert_allclose(result, [90.0, 55.0, 55.0, 90.0])
+
+    def test_position_angle_velocity_and_phase_curve_keep_knee_sign(self):
+        angles = np.array([0.0, 30.0, 45.0, 60.0, 90.0])
+        radians = np.deg2rad(angles)
+        hip = np.tile([0.0, 0.0, 1.0], (len(angles), 1))
+        knee = np.zeros((len(angles), 3))
+        ankle = np.column_stack((-np.sin(radians), np.zeros(len(angles)), -np.cos(radians)))
+        measured = knee_flexion_angle(hip, knee, ankle)
+        angular_speed = angular_velocity(measured, sampling_hz=10.0)
+        phase = normalize_to_phase(np.arange(len(angles)), measured, 0, len(angles) - 1, 101)
+        np.testing.assert_allclose(measured, angles, atol=1e-10)
+        self.assertTrue(np.all(angular_speed > 0.0))
+        self.assertGreater(phase[-1], phase[0])
+        self.assertTrue(np.all(np.diff(phase) >= 0.0))
+
+    def test_bilateral_differences_preserve_oriented_angle_sign(self):
+        np.testing.assert_allclose(
+            bilateral_difference([30.0, 0.0], [10.0, 20.0]), [20.0, -20.0]
+        )
 
     def test_short_gap_is_interpolated_but_long_and_edge_gaps_remain(self):
         values = np.array([np.nan, 0.0, np.nan, 2.0, np.nan, np.nan, np.nan, np.nan, np.nan, 9.0])

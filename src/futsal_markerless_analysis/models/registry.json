@@ -1,28 +1,92 @@
 {
+  "weights_distributed": false,
+  "artifact_policy": "Trained pose and detector checkpoints are not distributed; inference requires a compatible local DeepLabCut model bundle.",
   "benchmark": {
     "training_frame_stride": 4,
     "training_frame_rate_hz": 240,
     "split": "participant-level training and validation; one partition",
+    "validation_participants": 3,
+    "cross_validation_folds": 1,
     "labels_total": 3181,
     "labels_train": 2324,
     "labels_validation": 857,
-    "landmarks": ["left_hip", "left_knee", "left_ankle", "left_foot", "right_hip", "right_knee", "right_ankle", "right_foot"],
+    "landmarks": [
+      "left_hip",
+      "left_knee",
+      "left_ankle",
+      "left_foot",
+      "right_hip",
+      "right_knee",
+      "right_ankle",
+      "right_foot"
+    ],
     "detector": "shared SSDLite detector",
     "detector_checkpoint": "snapshot-detector-best-020.pt",
     "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
     "inference_pcutoff": 0.6,
-    "inference_snapshot_index": -1,
-    "detector_snapshot_index": -1,
     "inference_batch_size": 1,
     "dynamic_cropping": false,
     "runs_per_architecture": 1,
-    "interpretation": "exploratory benchmark; selected checkpoints are not evidence of a universal architecture ranking"
+    "interpretation": "exploratory benchmark; selected checkpoints are not evidence of a universal architecture ranking",
+    "source_project_snapshotindex_default": -1,
+    "source_project_detector_snapshotindex_default": -1,
+    "runtime_checkpoint_selection": "Exact registered pose and detector filenames are resolved to current DeepLabCut snapshot indexes at inference time."
   },
   "models": {
-    "RTMPose-S": {"architecture": "rtmpose_s", "shuffle": 101, "selected_epoch": 15, "checkpoint": "snapshot-015.pt", "sha256": "842003A5530EA74515D3381B5E753F6A39ECE511ADD1DFC5B08944E79BE9A6C5", "selection_validation_rmse_px": 13.82, "selection_validation_rmse_pcutoff_px": 13.64, "selection_validation_map": 77.40, "selection_validation_mar": 85.93, "release_asset": "RTMPose-S.zip"},
-    "RTMPose-M": {"architecture": "rtmpose_m", "shuffle": 102, "selected_epoch": 28, "checkpoint": "snapshot-best-028.pt", "sha256": "CF21F72B2D9E5D0BF76EB0BE8207E5B37E55B1947E51EB67B0B9F1220414FD01", "selection_validation_rmse_px": 15.54, "selection_validation_rmse_pcutoff_px": 14.58, "selection_validation_map": 66.23, "selection_validation_mar": 76.00, "release_asset": "RTMPose-M.zip"},
-    "RTMPose-X": {"architecture": "rtmpose_x", "shuffle": 103, "selected_epoch": 4, "checkpoint": "snapshot-best-004.pt", "sha256": "4B39C184CCA4144158206012513F05BA04C144CB2308DC5B2D3DA6E30B336AC4", "selection_validation_rmse_px": 15.62, "selection_validation_rmse_pcutoff_px": 15.83, "selection_validation_map": 61.29, "selection_validation_mar": 75.06, "release_asset": "RTMPose-X.zip"},
-    "HRNet-W48": {"architecture": "hrnet_w48", "shuffle": 104, "selected_epoch": 35, "checkpoint": "snapshot-best-035.pt", "sha256": "ADEC05378B8246241559FC25306FC2FF3FFE488A5D0F381D6BB5D7958AB09319", "selection_validation_rmse_px": 12.49, "selection_validation_rmse_pcutoff_px": 12.26, "selection_validation_map": 86.75, "selection_validation_mar": 90.91, "release_asset": "HRNet-W48.zip"},
-    "ResNet-101": {"architecture": "resnet_101", "shuffle": 105, "selected_epoch": 25, "checkpoint": "snapshot-025.pt", "sha256": "7245E79B6C39E5045BF25C36E4A1D1D2AD6EF7410B204B301DC401073F541332", "selection_validation_rmse_px": 12.55, "selection_validation_rmse_pcutoff_px": 12.25, "selection_validation_map": 84.88, "selection_validation_mar": 90.75, "release_asset": "ResNet-101.zip"}
+    "RTMPose-S": {
+      "architecture": "rtmpose_s",
+      "shuffle": 101,
+      "selected_epoch": 15,
+      "checkpoint": "snapshot-015.pt",
+      "sha256": "842003A5530EA74515D3381B5E753F6A39ECE511ADD1DFC5B08944E79BE9A6C5",
+      "selection_validation_rmse_px": 13.82,
+      "selection_validation_rmse_pcutoff_px": 13.64,
+      "selection_validation_map": 77.4,
+      "selection_validation_mar": 85.93
+    },
+    "RTMPose-M": {
+      "architecture": "rtmpose_m",
+      "shuffle": 102,
+      "selected_epoch": 28,
+      "checkpoint": "snapshot-best-028.pt",
+      "sha256": "CF21F72B2D9E5D0BF76EB0BE8207E5B37E55B1947E51EB67B0B9F1220414FD01",
+      "selection_validation_rmse_px": 15.54,
+      "selection_validation_rmse_pcutoff_px": 14.58,
+      "selection_validation_map": 66.23,
+      "selection_validation_mar": 76.0
+    },
+    "RTMPose-X": {
+      "architecture": "rtmpose_x",
+      "shuffle": 103,
+      "selected_epoch": 4,
+      "checkpoint": "snapshot-best-004.pt",
+      "sha256": "4B39C184CCA4144158206012513F05BA04C144CB2308DC5B2D3DA6E30B336AC4",
+      "selection_validation_rmse_px": 15.62,
+      "selection_validation_rmse_pcutoff_px": 15.83,
+      "selection_validation_map": 61.29,
+      "selection_validation_mar": 75.06
+    },
+    "HRNet-W48": {
+      "architecture": "hrnet_w48",
+      "shuffle": 104,
+      "selected_epoch": 35,
+      "checkpoint": "snapshot-best-035.pt",
+      "sha256": "ADEC05378B8246241559FC25306FC2FF3FFE488A5D0F381D6BB5D7958AB09319",
+      "selection_validation_rmse_px": 12.49,
+      "selection_validation_rmse_pcutoff_px": 12.26,
+      "selection_validation_map": 86.75,
+      "selection_validation_mar": 90.91
+    },
+    "ResNet-101": {
+      "architecture": "resnet_101",
+      "shuffle": 105,
+      "selected_epoch": 25,
+      "checkpoint": "snapshot-025.pt",
+      "sha256": "7245E79B6C39E5045BF25C36E4A1D1D2AD6EF7410B204B301DC401073F541332",
+      "selection_validation_rmse_px": 12.55,
+      "selection_validation_rmse_pcutoff_px": 12.25,
+      "selection_validation_map": 84.88,
+      "selection_validation_mar": 90.75
+    }
   }
 }

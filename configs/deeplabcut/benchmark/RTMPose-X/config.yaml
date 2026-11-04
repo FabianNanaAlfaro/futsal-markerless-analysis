@@ -1,0 +1,52 @@
+Task: DLC_Oro_benchmark_5_arquitecturas_2026
+scorer: dlc_oro
+date: '2026-08-24'
+multianimalproject: false
+identity: false
+project_path: .
+engine: pytorch
+video_sets: {}
+bodyparts:
+- caderaDer
+- caderaIzq
+- rodillaDer
+- rodillaIzq
+- tobilloDer
+- tobilloIzq
+- pieDer
+- pieIzq
+start: 0
+stop: 1
+numframes2pick: 20
+skeleton:
+- - caderaDer
+  - rodillaDer
+- - rodillaDer
+  - tobilloDer
+- - tobilloDer
+  - pieDer
+- - caderaIzq
+  - rodillaIzq
+- - rodillaIzq
+  - tobilloIzq
+- - tobilloIzq
+  - pieIzq
+skeleton_color: black
+pcutoff: 0.6
+dotsize: 8
+alphavalue: 0.7
+colormap: rainbow
+TrainingFraction:
+- 0.730588
+iteration: 0
+default_net_type: rtmpose_s
+default_augmenter: albumentations
+snapshotindex: -1
+detector_snapshotindex: -1
+batch_size: 1
+detector_batch_size: 1
+cropping: false
+x1: 0
+x2: 848
+y1: 0
+y2: 480

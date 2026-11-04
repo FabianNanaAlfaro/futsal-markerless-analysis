@@ -7,6 +7,12 @@ import math
 
 import numpy as np
 
+from futsal_markerless_analysis.kinematics import (
+    ankle_dorsiflexion_angle,
+    knee_flexion_angle,
+    signed_symmetry_index,
+)
+
 
 def _positions(rows):
     converted = []
@@ -71,18 +77,20 @@ def angle_series(landmarks, proximal, vertex, distal):
     return output
 
 
-def symmetry_index(left, right):
-    """Percent difference relative to the mean absolute magnitude."""
-    if left is None or right is None:
+def symmetry_index(dominant, non_dominant):
+    """Signed speed index 200*(dominant - non-dominant)/(dominant + non-dominant)."""
+    if dominant is None or non_dominant is None:
         return None
-    left = float(left)
-    right = float(right)
-    if not math.isfinite(left) or not math.isfinite(right):
-        return None
-    denominator = (abs(left) + abs(right)) / 2.0
-    if denominator == 0:
-        return None
-    return 100.0 * abs(left - right) / denominator
+    result = float(signed_symmetry_index([dominant], [non_dominant])[0])
+    return result if math.isfinite(result) else None
+
+
+def _position_series(rows, length):
+    values = np.full((length, 3), np.nan, dtype=float)
+    for index, row in enumerate(rows[:length]):
+        if row is not None and len(row) == 3:
+            values[index] = [np.nan if value is None else float(value) for value in row]
+    return values
 
 
 def derived_kinematics(landmarks, sampling_hz):
@@ -95,9 +103,15 @@ def derived_kinematics(landmarks, sampling_hz):
             "speed": speed_from_velocity(velocity),
         }
     if all(name in landmarks for name in ("hip", "knee", "ankle")):
-        result["angles_deg"]["knee"] = angle_series(landmarks, "hip", "knee", "ankle")
+        length = max(len(landmarks[name]) for name in ("hip", "knee", "ankle"))
+        result["angles_deg"]["knee"] = _json_values(knee_flexion_angle(
+            *(_position_series(landmarks[name], length) for name in ("hip", "knee", "ankle"))
+        ))
     if all(name in landmarks for name in ("knee", "ankle", "foot")):
-        result["angles_deg"]["ankle"] = angle_series(landmarks, "knee", "ankle", "foot")
+        length = max(len(landmarks[name]) for name in ("knee", "ankle", "foot"))
+        result["angles_deg"]["ankle"] = _json_values(ankle_dorsiflexion_angle(
+            *(_position_series(landmarks[name], length) for name in ("knee", "ankle", "foot"))
+        ))
     return result
 
 

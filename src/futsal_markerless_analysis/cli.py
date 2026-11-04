@@ -63,7 +63,7 @@ def _parser() -> argparse.ArgumentParser:
 
     dlc = commands.add_parser("pose-dlc", help="run a registered DeepLabCut model on new videos")
     dlc.add_argument("--model", choices=tuple(model_registry()["models"]), required=True)
-    dlc.add_argument("--model-bundle", type=Path, required=True, help="extracted model release bundle")
+    dlc.add_argument("--model-bundle", type=Path, required=True, help="local compatible DeepLabCut model bundle")
     dlc.add_argument("--video", type=Path, action="append", required=True)
     dlc.add_argument("--camera", default="CAM_1", help="camera label written to canonical 2D tracks")
     dlc.add_argument("--device", help="PyTorch device such as cuda:0 or cpu")

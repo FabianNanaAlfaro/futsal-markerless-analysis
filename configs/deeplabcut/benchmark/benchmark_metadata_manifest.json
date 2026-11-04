@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "training_project": "DLC_Oro_benchmark_5_arquitecturas_2026",
+  "training_date": "2026-08-24",
+  "training_fraction": 0.730588,
+  "training_labels": 2324,
+  "validation_labels": 857,
+  "total_labels": 3181,
+  "training_frame_stride": 4,
+  "training_frame_rate_hz": 240,
+  "landmarks": [
+    "caderaDer",
+    "caderaIzq",
+    "rodillaDer",
+    "rodillaIzq",
+    "tobilloDer",
+    "tobilloIzq",
+    "pieDer",
+    "pieIzq"
+  ],
+  "detector_checkpoint": "snapshot-detector-best-020.pt",
+  "models": {
+    "RTMPose-S": {
+      "selected_checkpoint_sha256": "842003A5530EA74515D3381B5E753F6A39ECE511ADD1DFC5B08944E79BE9A6C5",
+      "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+      "model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle101",
+      "configuration_directory": "RTMPose-S",
+      "weights_included_in_bundle": false
+    },
+    "RTMPose-M": {
+      "selected_checkpoint_sha256": "CF21F72B2D9E5D0BF76EB0BE8207E5B37E55B1947E51EB67B0B9F1220414FD01",
+      "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+      "model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle102",
+      "configuration_directory": "RTMPose-M",
+      "weights_included_in_bundle": false
+    },
+    "RTMPose-X": {
+      "selected_checkpoint_sha256": "4B39C184CCA4144158206012513F05BA04C144CB2308DC5B2D3DA6E30B336AC4",
+      "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+      "model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle103",
+      "configuration_directory": "RTMPose-X",
+      "weights_included_in_bundle": false
+    },
+    "HRNet-W48": {
+      "selected_checkpoint_sha256": "ADEC05378B8246241559FC25306FC2FF3FFE488A5D0F381D6BB5D7958AB09319",
+      "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+      "model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle104",
+      "configuration_directory": "HRNet-W48",
+      "weights_included_in_bundle": false
+    },
+    "ResNet-101": {
+      "selected_checkpoint_sha256": "7245E79B6C39E5045BF25C36E4A1D1D2AD6EF7410B204B301DC401073F541332",
+      "detector_checkpoint_sha256": "4AA1810F85075A70177DB64FB7C3D21C65F39B95B8CEAC9190D068693F39ED63",
+      "model_folder": "DLC_Oro_benchmark_5_arquitecturas_20262026-08-24-trainset73shuffle105",
+      "configuration_directory": "ResNet-101",
+      "weights_included_in_bundle": false
+    }
+  }
+}

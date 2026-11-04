@@ -39,7 +39,7 @@ def knee_flexion_angle(hip, knee, ankle) -> np.ndarray:
     hip, knee, ankle = (np.asarray(p, dtype=float) for p in (hip, knee, ankle))
     thigh = np.stack((hip[..., 0] - knee[..., 0], hip[..., 2] - knee[..., 2]), axis=-1)
     shank = np.stack((ankle[..., 0] - knee[..., 0], ankle[..., 2] - knee[..., 2]), axis=-1)
-    return _wrap_degrees(_oriented_sagittal_angle(thigh, shank) + 180.0)
+    return _wrap_degrees(180.0 - _oriented_sagittal_angle(thigh, shank))
 
 
 def ankle_dorsiflexion_angle(knee, ankle, foot) -> np.ndarray:

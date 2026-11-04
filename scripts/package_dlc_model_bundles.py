@@ -69,10 +69,14 @@ def distribution_version(name: str) -> str | None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Create portable, inference-ready bundles for the five thesis DLC checkpoints."
+        description="Export benchmark metadata or create local bundles from the five thesis DLC checkpoints."
     )
     parser.add_argument("--source-project", type=Path, required=True, help="DeepLabCut project root")
-    parser.add_argument("--output-dir", type=Path, required=True, help="new or empty directory for model bundles and ZIP assets")
+    parser.add_argument("--output-dir", type=Path, required=True, help="new or empty output directory")
+    parser.add_argument(
+        "--metadata-only", action="store_true",
+        help="export portable YAML and benchmark metadata without copying or archiving checkpoint weights",
+    )
     parser.add_argument(
         "--registry",
         type=Path,
@@ -138,8 +142,9 @@ def main() -> int:
         test_dest = bundle_model_dir / "test"
         train_dest.mkdir(parents=True)
         test_dest.mkdir(parents=True)
-        shutil.copy2(snapshot_source, train_dest / model["checkpoint"])
-        shutil.copy2(detector_source, train_dest / DETECTOR_CHECKPOINT)
+        if not args.metadata_only:
+            shutil.copy2(snapshot_source, train_dest / model["checkpoint"])
+            shutil.copy2(detector_source, train_dest / DETECTOR_CHECKPOINT)
         write_yaml(train_config_source, train_dest / "pytorch_config.yaml")
         write_yaml(pose_source, test_dest / "pose_cfg.yaml")
 
@@ -164,9 +169,11 @@ def main() -> int:
             "detector_checkpoint_sha256": digest(detector_source),
             "checkpoint_size_bytes": snapshot_source.stat().st_size,
             "detector_size_bytes": detector_source.stat().st_size,
+            "weights_included_in_bundle": not args.metadata_only,
             "training_fraction": fraction,
-            "inference_snapshot_index": -1,
-            "detector_snapshot_index": -1,
+            "source_project_snapshotindex_default": int(portable_config.get("snapshotindex", -1)),
+            "source_project_detector_snapshotindex_default": int(portable_config.get("detector_snapshotindex", -1)),
+            "runtime_checkpoint_selection": "exact registered pose and detector filenames resolved by the CLI",
             "inference_pcutoff_for_reported_metrics": registry["benchmark"]["inference_pcutoff"],
             "bodyparts": config.get("bodyparts", []),
             "source_model_folder": folder_name,
@@ -188,64 +195,65 @@ def main() -> int:
         (bundle_dir / "model_metadata.json").write_text(
             json.dumps(model_metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
-        license_path = Path(__file__).resolve().parents[1] / "LICENSE"
-        shutil.copy2(license_path, bundle_dir / "LICENSE.txt")
-        bundle_readme = f"""# {model_name} DeepLabCut model bundle
+        bundle_readme = f"""# {model_name} DeepLabCut model record
 
-This bundle contains the thesis-trained {model_name} lower-limb pose checkpoint and the shared SSDLite person detector used by the five-model benchmark.
+This record preserves the portable DeepLabCut project and architecture settings for the thesis-trained {model_name} lower-limb pose model.
 
 ## Files
 
 - config.yaml: portable DLC project settings with study video paths removed.
-- dlc-models-pytorch/: selected pose checkpoint, shared detector checkpoint, architecture/training configuration and inference configuration.
-- model_metadata.json: selected epoch, checkpoint hashes, benchmark metadata and inference snapshot indexes.
+- dlc-models-pytorch/: architecture/training configuration and inference configuration.
+- model_metadata.json: selected epoch, checkpoint hashes and benchmark metadata.
 
-The training videos, participant annotations and calibration files are not included. The training-set label interval was one frame in four at 240 Hz. It describes annotation sampling only.
+The public repository configuration record does not include pose or detector weights, training videos, participant annotations or calibration files. The training-set label interval was one frame in four at 240 Hz; it describes annotation sampling only. When this script is run without `--metadata-only`, checkpoint files are copied from the supplied local source project into a local bundle.
 
 ## Inference
 
-From the package repository, install the dlc extra in a Python 3.10–3.12 environment with a compatible PyTorch CPU or CUDA installation. Then run:
+Inference requires a compatible local bundle containing the corresponding checkpoint files, plus the dlc extra in a Python 3.10–3.12 environment with a compatible PyTorch CPU or CUDA installation. Then run:
 
     futsal-markerless pose-dlc --model "{model_name}" --model-bundle ./{model_name} --video input.mp4 --camera CAM_1 --output predictions
 
-The command fixes both snapshot indexes to -1; each bundle contains only the selected pose checkpoint and detector checkpoint. Use a new or empty output directory so DLC does not reuse previous predictions. DLC outputs preserve its native files and the command also writes a canonical <video>_tracks_2d.csv. Optional device and batch-size settings are available in the CLI.
+The CLI resolves the registered pose and detector checkpoint filenames to DeepLabCut snapshot indexes at runtime and checks both files against their recorded hashes. Use a new or empty output directory so DLC does not reuse previous predictions. DLC outputs preserve its native files and the command also writes a canonical <video>_tracks_2d.csv. Optional device and batch-size settings are available in the CLI.
 
-## License and attribution
+## Artifact terms
 
-The pose and detector checkpoint artifacts in this bundle are released under the MIT License included as LICENSE.txt. The repository NOTICE.md describes attribution and source-data boundaries. DeepLabCut and its dependencies retain their own licenses. Do not redistribute the training videos or annotations through this bundle.
+This repository does not assign license terms to trained checkpoint artifacts. Confirm their applicable terms before using or redistributing local model files. DeepLabCut and its dependencies retain their own licenses. Do not redistribute study videos, annotations or calibration records.
 """
         (bundle_dir / "README.md").write_text(bundle_readme, encoding="utf-8")
-        (bundle_dir / "NOTICE.txt").write_text(
-            "Trained model parameters by Fabian A. Nana for the futsal-kicking thesis project. "
-            "The original study videos, annotations and calibration records are not included. "
-            "DeepLabCut and dependency licenses remain applicable to their respective software. "
-            "See the repository NOTICE.md for project attribution and source-data boundaries.\n",
-            encoding="utf-8",
-        )
-
         for text_path in bundle_dir.rglob("*"):
             if text_path.is_file() and text_path.suffix.lower() in {".yaml", ".yml", ".json", ".md", ".txt"}:
                 validate_no_local_paths(text_path)
 
-        archive = out / model["release_asset"]
-        if archive.exists():
-            parser.error(f"archive already exists and was left untouched: {archive}")
-        with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_STORED) as bundle_zip:
-            for item in sorted(bundle_dir.rglob("*")):
-                if item.is_file():
-                    bundle_zip.write(item, item.relative_to(bundle_dir).as_posix())
         manifest["models"][model_name] = {
-            "archive": archive.name,
-            "archive_size_bytes": archive.stat().st_size,
             "selected_checkpoint_sha256": model_metadata["selected_checkpoint_sha256"],
             "detector_checkpoint_sha256": model_metadata["detector_checkpoint_sha256"],
             "model_folder": folder_name,
+            "configuration_directory": model_name,
+            "weights_included_in_bundle": not args.metadata_only,
         }
+        if not args.metadata_only:
+            archive = out / f"{model_name}.zip"
+            if archive.exists():
+                parser.error(f"archive already exists and was left untouched: {archive}")
+            with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_STORED) as bundle_zip:
+                for item in sorted(bundle_dir.rglob("*")):
+                    if item.is_file():
+                        bundle_zip.write(item, item.relative_to(bundle_dir).as_posix())
+            manifest["models"][model_name]["local_archive"] = archive.name
+            manifest["models"][model_name]["archive_size_bytes"] = archive.stat().st_size
 
-    manifest_path = out / "bundles_manifest.json"
+    manifest_name = "benchmark_metadata_manifest.json" if args.metadata_only else "local_bundles_manifest.json"
+    manifest_path = out / manifest_name
     if manifest_path.exists():
         parser.error(f"manifest already exists and was left untouched: {manifest_path}")
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if args.metadata_only:
+        (out / "README.md").write_text(
+            "# DeepLabCut benchmark configuration records\n\n"
+            "These portable project and model configuration files preserve the thesis benchmark settings and reported metadata. "
+            "Pose and detector checkpoint files are not included. To run inference, supply compatible local model weights in a complete bundle.\n",
+            encoding="utf-8",
+        )
     print(json.dumps(manifest, indent=2, ensure_ascii=False))
     return 0
 

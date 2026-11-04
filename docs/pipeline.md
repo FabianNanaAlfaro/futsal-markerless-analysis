@@ -20,7 +20,7 @@ Each route estimates or digitizes coordinates in image pixels. The manual DVIDEO
 
 For the thesis, Sports2D used YOLOX with a Halpe-26 body-with-feet pose model. It ordered candidates by greatest displacement and used DeepSORT tracking; unusable tracks received a separate run with manual target selection. MediaPipe Pose 0.10.21 generated 33 landmarks from a fixed ROI per camera and side; only the kicking-side hip, knee, ankle and Foot Index were retained. The DLC benchmark trained five models on bilateral lower-limb points.
 
-MediaPipe laterality is supplied explicitly by the researcher. This package does not select MediaPipe side or frame offset by minimizing error against DVIDEOW.
+MediaPipe laterality and the camera-specific region of interest are supplied explicitly by the researcher. DVIDEOW is used as the manual reference in the subsequent comparison of reconstructed and derived results.
 
 ## 2. Homologate and curate 2D coordinates
 

@@ -46,7 +46,7 @@ All joint angles are computed from 3D landmarks projected to X–Z:
 - Speed: Euclidean norm of the three velocity components at each functional point.
 - Angular velocity: time derivative of the unwrapped joint-angle signal, in degrees per second.
 
-The implementation follows the intended sign conventions stated in the thesis. For the ankle angle, the proximal shank vector is oriented ankle-to-knee so that the neutral reference is −90° before the 90° shift to zero.
+The knee is calculated from the thigh vector (K→H) and shank vector (K→A) projected onto X–Z. Its signed segment angle is referenced to full extension using `wrap(180° − angle(thigh, shank))`; posterior ankle displacement is flexion and is positive when +X is anterior. Angular velocity is derived from the unwrapped angle before the curve is normalized to 101 phase points. For the ankle, the implementation orients the shank from ankle to knee to match the stated neutral reference; see [`reproducibility-notes.md`](reproducibility-notes.md) for the direction wording in the thesis.
 
 ## Bilateral and method metrics
 
@@ -62,6 +62,6 @@ Spatial agreement includes Euclidean MAE/RMSE, centered RMSE, P95 error, per-axi
 
 ## DeepLabCut training and evaluation partitions
 
-The study labelled eight lower-limb points on 3,181 frames: 2,324 training and 857 selection-validation annotations. Labels were sampled at one frame in four from 240 Hz videos across the complete sequences. The split was participant-level, with one partition and one run per architecture. This sampling describes label construction only; it is not a pose-inference stride.
+The study labelled eight lower-limb points on 3,181 frames: 2,324 training and 857 selection-validation annotations. Labels were sampled at one frame in four from 240 Hz videos across the complete sequences. The split was participant-level, with one partition, three participants reserved for model selection and one run per architecture. This sampling describes label construction only; it is not a pose-inference stride. Sanitized model configurations are available under [`../configs/deeplabcut/benchmark/`](../configs/deeplabcut/benchmark/); checkpoint files are not distributed.
 
-The thesis’s strict spatial subset contains ten frames immediately before impact. The 101-point phase curves are a separate temporal representation. The validation partition was also used to select the checkpoint and architecture; it is not an independent external test set. See [`deeplabcut-benchmark.md`](deeplabcut-benchmark.md) for selected checkpoints and reported metrics.
+The thesis’s strict spatial subset contains ten frames immediately before impact. The 101-point phase curves are a separate temporal representation. The validation partition was also used to select the checkpoint and architecture; it is not an independent external test set. See [`deeplabcut-benchmark.md`](deeplabcut-benchmark.md) for selected-checkpoint identifiers and reported metrics.
