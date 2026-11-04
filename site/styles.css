@@ -125,6 +125,8 @@ pre code { color: inherit; white-space: pre; }
 .text-link { margin-left: 4px; color: var(--cyan); font-size: 12px; font-weight: 800; text-decoration: none; }
 .footer { display: flex; justify-content: space-between; gap: 20px; padding: 27px 0 35px; color: var(--muted-2); font-size: 11px; }
 .footer-links { display: flex; gap: 18px; }
+.footer-brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.footer-brand img { display: block; width: min(220px, 100%); height: auto; border-radius: 8px; }
 .footer a { text-decoration: none; }
 button, a { outline-offset: 4px; }
 :focus-visible { outline: 2px solid var(--amber); }

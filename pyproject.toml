@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sports2d-dvideow-thesis-pipeline"
+name = "futsal-markerless-analysis"
 version = "0.2.0"
 description = "Reusable markerless pose and biomechanical analysis methods from a futsal kicking thesis"
 readme = "README.md"
@@ -29,10 +29,10 @@ dev = ["build>=1.2", "pytest>=8"]
 spm = ["spm1d>=0.4,<0.5"]
 
 [project.scripts]
-sports2d-dvideow = "sports2d_dvideow_pipeline.cli:main"
+futsal-markerless = "futsal_markerless_analysis.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-sports2d_dvideow_pipeline = ["models/*.json"]
+futsal_markerless_analysis = ["models/*.json"]

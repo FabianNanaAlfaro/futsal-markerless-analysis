@@ -8,9 +8,9 @@ calibrations/
 weights/
 checkpoints/
 models/
-!src/sports2d_dvideow_pipeline/models/
-src/sports2d_dvideow_pipeline/models/*
-!src/sports2d_dvideow_pipeline/models/registry.json
+!src/futsal_markerless_analysis/models/
+src/futsal_markerless_analysis/models/*
+!src/futsal_markerless_analysis/models/registry.json
 *.avi
 *.mp4
 *.mov

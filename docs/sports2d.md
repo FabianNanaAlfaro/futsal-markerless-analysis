@@ -11,7 +11,7 @@ In a new environment, install the tested CPU PyTorch pair and the optional packa
 ```powershell
 python -m pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cpu
 python -m pip install ".[sports2d]"
-sports2d-dvideow pose-sports2d `
+futsal-markerless pose-sports2d `
   --video .\study\camera-1.mp4 `
   --config .\config\sports2d-camera-1.toml `
   --side right --camera CAM_1 `

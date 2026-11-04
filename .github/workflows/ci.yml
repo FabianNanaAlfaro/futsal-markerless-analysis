@@ -33,9 +33,9 @@ jobs:
       - name: Run numerical and schema tests
         run: python -m unittest discover -s tests -v
       - name: Run the installed synthetic pipeline
-        run: sports2d-dvideow demo --output build/synthetic-demo --frames 64
+        run: futsal-markerless demo --output build/synthetic-demo --frames 64
       - name: Inspect the released DLC model registry
-        run: sports2d-dvideow models --json
+        run: futsal-markerless models --json
       - name: Run synthetic DLT smoke test
         run: python src/reconstruct_json.py examples/dlt-input.example.json
       - name: Validate five-model benchmark plan
@@ -45,17 +45,17 @@ jobs:
       - name: Compile public utilities
         run: >-
           python -m py_compile
-          src/sports2d_dvideow_pipeline/__init__.py
-          src/sports2d_dvideow_pipeline/schema.py
-          src/sports2d_dvideow_pipeline/geometry.py
-          src/sports2d_dvideow_pipeline/temporal.py
-          src/sports2d_dvideow_pipeline/kinematics.py
-          src/sports2d_dvideow_pipeline/metrics.py
-          src/sports2d_dvideow_pipeline/pipeline.py
-          src/sports2d_dvideow_pipeline/cli.py
-          src/sports2d_dvideow_pipeline/adapters/mediapipe.py
-          src/sports2d_dvideow_pipeline/adapters/sports2d.py
-          src/sports2d_dvideow_pipeline/adapters/dlc.py
+          src/futsal_markerless_analysis/__init__.py
+          src/futsal_markerless_analysis/schema.py
+          src/futsal_markerless_analysis/geometry.py
+          src/futsal_markerless_analysis/temporal.py
+          src/futsal_markerless_analysis/kinematics.py
+          src/futsal_markerless_analysis/metrics.py
+          src/futsal_markerless_analysis/pipeline.py
+          src/futsal_markerless_analysis/cli.py
+          src/futsal_markerless_analysis/adapters/mediapipe.py
+          src/futsal_markerless_analysis/adapters/sports2d.py
+          src/futsal_markerless_analysis/adapters/dlc.py
           src/validate_manifest.py
           src/audit_public_release.py
           src/dlt.py

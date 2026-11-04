@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If this public pipeline is useful, cite the repository and the related preliminary work separately."
-title: "Sports2D–DVIDEOW thesis pipeline"
+title: "Futsal Markerless Analysis"
 version: "0.2.0"
 date-released: 2026-11-04
 abstract: >-
@@ -37,8 +37,8 @@ keywords:
   - MediaPipe
   - DLT
 license: MIT
-repository-code: "https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline"
-url: "https://fabiannanaalfaro.github.io/sports2d-dvideow-thesis-pipeline/"
+repository-code: "https://github.com/FabianNanaAlfaro/futsal-markerless-analysis"
+url: "https://fabiannanaalfaro.github.io/futsal-markerless-analysis/"
 references:
   - type: article
     authors:

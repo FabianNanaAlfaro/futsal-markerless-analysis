@@ -21,7 +21,7 @@ from .synthetic import generate_example
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="sports2d-dvideow", description=__doc__)
+    parser = argparse.ArgumentParser(prog="futsal-markerless", description=__doc__)
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
 

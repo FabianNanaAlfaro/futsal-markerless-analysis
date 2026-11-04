@@ -1,13 +1,13 @@
 # Python API and command-line reference
 
-The reusable implementation is in `src/sports2d_dvideow_pipeline/`. The command-line interface calls the same functions exported by the package.
+The reusable implementation is in `src/futsal_markerless_analysis/`. The command-line interface calls the same functions exported by the package.
 
 ## Python API
 
 The central function accepts canonical 2D observations and calibration matrices:
 
 ```python
-from sports2d_dvideow_pipeline.pipeline import process_trial, read_tracks_csv, write_result
+from futsal_markerless_analysis.pipeline import process_trial, read_tracks_csv, write_result
 import json
 
 tracks = read_tracks_csv("camera_pair_tracks.csv")
@@ -55,4 +55,4 @@ Calibration JSON contains a `projection_matrices` object whose camera values are
 
 ## CLI groups
 
-Run `sports2d-dvideow --help` and `sports2d-dvideow <command> --help` to see options for `demo`, `pose-mediapipe`, `pose-sports2d`, `pose-dlc`, `run`, `bilateral`, `agreement` and `models`. Installation and runnable commands are in the [README](../README.md).
+Run `futsal-markerless --help` and `futsal-markerless <command> --help` to see options for `demo`, `pose-mediapipe`, `pose-sports2d`, `pose-dlc`, `run`, `bilateral`, `agreement` and `models`. Installation and runnable commands are in the [README](../README.md).

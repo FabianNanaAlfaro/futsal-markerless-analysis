@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 def model_registry() -> dict:
-    path = files("sports2d_dvideow_pipeline").joinpath("models/registry.json")
+    path = files("futsal_markerless_analysis").joinpath("models/registry.json")
     return json.loads(path.read_text(encoding="utf-8"))
 
 

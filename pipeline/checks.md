@@ -10,4 +10,4 @@ Before interpreting a reconstruction, verify:
 - The 2D export preserves missing coordinates and confidence values.
 - Reprojection residuals and finite reconstructed points are reviewed before kinematic interpretation.
 
-The package exports the input tracks, 3D kinematics, phase-normalized curves, reprojection diagnostics and run metadata. Use a paired reference and the evaluation functions in `sports2d_dvideow_pipeline.metrics` when agreement is the analysis question.
+The package exports the input tracks, 3D kinematics, phase-normalized curves, reprojection diagnostics and run metadata. Use a paired reference and the evaluation functions in `futsal_markerless_analysis.metrics` when agreement is the analysis question.

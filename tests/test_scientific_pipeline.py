@@ -8,21 +8,21 @@ from pathlib import Path
 
 import numpy as np
 
-from sports2d_dvideow_pipeline.cli import main
-from sports2d_dvideow_pipeline.adapters.sports2d import read_sports2d_trc
-from sports2d_dvideow_pipeline.geometry import load_projection_matrices, triangulate_point
-from sports2d_dvideow_pipeline.kinematics import (
+from futsal_markerless_analysis.cli import main
+from futsal_markerless_analysis.adapters.sports2d import read_sports2d_trc
+from futsal_markerless_analysis.geometry import load_projection_matrices, triangulate_point
+from futsal_markerless_analysis.kinematics import (
     ankle_dorsiflexion_angle,
     angular_velocity,
     knee_flexion_angle,
     signed_symmetry_index,
     vector_velocity,
 )
-from sports2d_dvideow_pipeline.metrics import coordinate_agreement, trajectory_association
-from sports2d_dvideow_pipeline.pipeline import process_trial, read_tracks_csv, write_result
-from sports2d_dvideow_pipeline.schema import homologate_landmark
-from sports2d_dvideow_pipeline.synthetic import SYNTHETIC_CALIBRATION, generate_example
-from sports2d_dvideow_pipeline.temporal import (
+from futsal_markerless_analysis.metrics import coordinate_agreement, trajectory_association
+from futsal_markerless_analysis.pipeline import process_trial, read_tracks_csv, write_result
+from futsal_markerless_analysis.schema import homologate_landmark
+from futsal_markerless_analysis.synthetic import SYNTHETIC_CALIBRATION, generate_example
+from futsal_markerless_analysis.temporal import (
     curate_2d_point,
     filter_common_trace,
     interpolate_short_gaps,

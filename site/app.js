@@ -70,7 +70,7 @@ function renderDetail(stage) {
       <div class="detail-cell"><span>Output</span><p>${stage.output}</p></div>
       <div class="detail-cell"><span>Method</span><p>${stage.detail}</p></div>
     </div>
-    <a class="detail-link" href="https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/blob/main/${stage.doc}">Read the documentation ↗</a>
+    <a class="detail-link" href="https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/blob/main/${stage.doc}">Read the documentation ↗</a>
   `;
 }
 

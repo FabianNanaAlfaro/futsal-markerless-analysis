@@ -12,7 +12,7 @@ from pathlib import Path
 import yaml
 
 
-REGISTRY_NAME = Path(__file__).resolve().parents[1] / "src/sports2d_dvideow_pipeline/models/registry.json"
+REGISTRY_NAME = Path(__file__).resolve().parents[1] / "src/futsal_markerless_analysis/models/registry.json"
 DETECTOR_CHECKPOINT = "snapshot-detector-best-020.pt"
 
 
@@ -206,7 +206,7 @@ The training videos, participant annotations and calibration files are not inclu
 
 From the package repository, install the dlc extra in a Python 3.10–3.12 environment with a compatible PyTorch CPU or CUDA installation. Then run:
 
-    sports2d-dvideow pose-dlc --model "{model_name}" --model-bundle ./{model_name} --video input.mp4 --camera CAM_1 --output predictions
+    futsal-markerless pose-dlc --model "{model_name}" --model-bundle ./{model_name} --video input.mp4 --camera CAM_1 --output predictions
 
 The command fixes both snapshot indexes to -1; each bundle contains only the selected pose checkpoint and detector checkpoint. Use a new or empty output directory so DLC does not reuse previous predictions. DLC outputs preserve its native files and the command also writes a canonical <video>_tracks_2d.csv. Optional device and batch-size settings are available in the CLI.
 

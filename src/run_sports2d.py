@@ -50,7 +50,7 @@ def main(argv=None):
     rendered = render_config(args.config_template, args.video, args.output_dir)
     generated = args.output_dir.parent / (args.output_dir.name + ".sports2d.generated.toml")
     command = [
-        "sports2d-dvideow", "pose-sports2d", "--video", str(args.video),
+        "futsal-markerless", "pose-sports2d", "--video", str(args.video),
         "--config", str(generated),
         "--side", args.side, "--camera", args.camera, "--output", str(args.output_dir),
     ]
@@ -64,9 +64,9 @@ def main(argv=None):
             print(rendered)
         return 0
 
-    executable = shutil.which("sports2d-dvideow")
+    executable = shutil.which("futsal-markerless")
     if executable is None:
-        print("sports2d-dvideow is not installed in the active environment", file=sys.stderr)
+        print("futsal-markerless is not installed in the active environment", file=sys.stderr)
         return 2
 
     args.output_dir.parent.mkdir(parents=True, exist_ok=True)

@@ -1,7 +1,9 @@
-# Sports2D–DVIDEOW thesis pipeline
+# Futsal Markerless Analysis
 
-[![CI](https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline/actions/workflows/ci.yml)
+[![CI](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/FabianNanaAlfaro/futsal-markerless-analysis/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/code-MIT-2ea44f)](LICENSE)
+
+<p align="center"><img src="site/assets/brand/tehealp-lockup-horizontal.png" width="280" alt="TeHealP horizontal lockup"></p>
 
 A Python library and command-line tool for lower-limb pose processing and kicking kinematics. It implements the reusable stages described in *Implementación y validación de algoritmos de inteligencia artificial para analizar la asimetría en el movimiento del pateo en futsal*: homologation of four functional landmarks, multi-camera DLT, temporal processing, 3D velocities, sagittal knee and ankle angles, bilateral metrics, and analysis exports.
 
@@ -9,7 +11,7 @@ The project supports four distinct 2D sources: manual DVIDEOW tracking as the re
 
 ## Capabilities
 
-- Installable Python package with reusable functions and the `sports2d-dvideow` CLI.
+- Installable Python package with reusable functions and the `futsal-markerless` CLI.
 - MediaPipe Pose extraction for a user-selected side, optional camera-specific ROI, and explicit mapping of cropped coordinates back to the original pixels.
 - Sports2D Python API adapter using a user-supplied TOML configuration.
 - DeepLabCut inference for the five thesis checkpoints, once a model bundle and DeepLabCut environment are available.
@@ -26,8 +28,8 @@ The project supports four distinct 2D sources: manual DVIDEOW tracking as the re
 The numerical core supports Python 3.10–3.12. Clone the repository, create a virtual environment, and install the package:
 
 ```powershell
-git clone https://github.com/FabianNanaAlfaro/sports2d-dvideow-thesis-pipeline.git
-cd sports2d-dvideow-thesis-pipeline
+git clone https://github.com/FabianNanaAlfaro/futsal-markerless-analysis.git
+cd futsal-markerless-analysis
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -62,7 +64,7 @@ MediaPipe is pinned to 0.10.21 to match the thesis route. DeepLabCut 3.0.1 suppo
 ## Run the synthetic example
 
 ```powershell
-sports2d-dvideow demo --output demo-output --frames 64
+futsal-markerless demo --output demo-output --frames 64
 ```
 
 This creates synthetic two-camera 2D coordinates and calibration, processes the trial, and writes:
@@ -80,7 +82,7 @@ The data are generated for demonstration and contain no thesis observations.
 Run MediaPipe separately on each synchronized camera view, with the participant side specified explicitly:
 
 ```powershell
-sports2d-dvideow pose-mediapipe `
+futsal-markerless pose-mediapipe `
   --video input_cam1.mp4 --camera CAM_1 --side right `
   --roi-config roi.json --output cam1_tracks.csv
 ```
@@ -90,7 +92,7 @@ Repeat for the second camera, then combine both files into a CSV with columns `f
 Process the 2D coordinates and derive kinematics:
 
 ```powershell
-sports2d-dvideow run `
+futsal-markerless run `
   --tracks paired_tracks.csv --calibration calibration.json `
   --side right --source markerless --sampling-hz 240 `
   --window-start-frame 180 --impact-frame 240 --output trial-output
@@ -101,7 +103,7 @@ For manual DVIDEOW 2D tracks, use `--source manual`; this skips markerless 2D cu
 Sports2D can be run with its own thesis-derived TOML or a study-specific TOML:
 
 ```powershell
-sports2d-dvideow pose-sports2d `
+futsal-markerless pose-sports2d `
   --video input_cam1.mp4 --config sports2d-config.toml `
   --side right --camera CAM_1 --output sports2d-output
 ```
@@ -135,7 +137,7 @@ These are single-run results on the study’s selection partition. ResNet-101 wa
 Example inference after installing DeepLabCut and extracting a model release bundle:
 
 ```powershell
-sports2d-dvideow pose-dlc `
+futsal-markerless pose-dlc `
   --model ResNet-101 --model-bundle models\ResNet-101 `
   --video new_kick.mp4 --camera CAM_1 --device cuda:0 `
   --batch-size 1 --output predictions
@@ -155,11 +157,11 @@ The Python DLT routine accepts calibration matrices supplied by the researcher. 
 
 The core accepts synchronized 2D observations in a simple CSV and calibration in JSON. It does not require the original study’s folder names, participant identifiers, videos, or calibration files. Outputs include processed 2D tracks, per-frame 3D positions, vector velocities, speed magnitudes, knee/ankle angles, angular velocities, a 101-point phase export, and per-frame reprojection diagnostics.
 
-Use `sports2d-dvideow bilateral --dominant dominant.csv --non-dominant non_dominant.csv --output bilateral.csv` to compare paired normalized curves. Use `sports2d-dvideow agreement --reference reference.csv --prediction estimate.csv --columns hip_x hip_y hip_z --output agreement.json` for coordinate agreement. See `sports2d-dvideow --help` for the full command list.
+Use `futsal-markerless bilateral --dominant dominant.csv --non-dominant non_dominant.csv --output bilateral.csv` to compare paired normalized curves. Use `futsal-markerless agreement --reference reference.csv --prediction estimate.csv --columns hip_x hip_y hip_z --output agreement.json` for coordinate agreement. See `futsal-markerless --help` for the full command list.
 
 ## Reuse and fine-tuning
 
-Use the numerical modules directly from `sports2d_dvideow_pipeline` or adapt the CSV schema to another markerless estimator. The five DeepLabCut bundles preserve each selected PyTorch checkpoint, inference configuration, landmark names and available training settings. Fine-tuning requires new annotations and the compatible DeepLabCut/PyTorch environment; the trained checkpoints are starting weights, not a supplied training dataset. The training software versions were not recorded in the source project files; the verified inference environment is listed in the model documentation.
+Use the numerical modules directly from `futsal_markerless_analysis` or adapt the CSV schema to another markerless estimator. The five DeepLabCut bundles preserve each selected PyTorch checkpoint, inference configuration, landmark names and available training settings. Fine-tuning requires new annotations and the compatible DeepLabCut/PyTorch environment; the trained checkpoints are starting weights, not a supplied training dataset. The training software versions were not recorded in the source project files; the verified inference environment is listed in the model documentation.
 
 ## Documentation and references
 
