@@ -11,14 +11,18 @@
   <img src="https://raw.githubusercontent.com/FabianNanaAlfaro/futsal-markerless-analysis/main/site/assets/brand/pucp-logo-white.svg#gh-dark-mode-only" width="150" alt="Pontificia Universidad Católica del Perú logo, dark theme">
 </p>
 
-A Python package and command-line tool for lower-limb pose processing and futsal-kicking kinematics. It supports manual DVIDEOW tracks and pose estimates from Sports2D, MediaPipe Pose, and the five DeepLabCut configurations evaluated in the thesis.
+A Python package and command-line tool for lower-limb pose processing and futsal-kicking kinematics. It brings manual DVIDEOW tracking and three markerless routes—Sports2D, MediaPipe Pose, and DeepLabCut—into a shared analysis workflow.
+
+## Study scope and acquisition
+
+The study examines whether three markerless pose-estimation routes can be applied to three-dimensional lower-limb analysis during the rapid futsal instep kick, and quantifies their outcome-specific agreement and limitations relative to manual tracking. The source corpus includes 13 professional players, 78 kicks (39 per side), and 156 analyzed camera views from a four-camera setup. Recordings were acquired at 240 Hz and 848 × 480 pixels. This low spatial resolution makes landmark localization demanding during a rapid movement, particularly for distal points such as the foot.
 
 ## Capabilities
 
 - Installable Python package with reusable functions and the `futsal-markerless` CLI.
 - MediaPipe Pose extraction for a user-selected side, optional camera-specific ROI, and explicit mapping of cropped coordinates back to the original pixels.
 - Sports2D Python API adapter using a user-supplied TOML configuration.
-- DeepLabCut inference for a selected thesis configuration when a compatible local model bundle and DeepLabCut environment are supplied.
+- DeepLabCut inference with a compatible local model bundle for any of the five study configurations.
 - Anatomical homologation to hip, knee, ankle, and foot.
 - User-supplied projection matrices or 11-coefficient DLT calibrations for 3D reconstruction.
 - Hampel-based 2D outlier removal, PCHIP interpolation of gaps up to five frames, linear fallback, and Savitzky–Golay smoothing for markerless tracks.
@@ -126,7 +130,7 @@ MediaPipe Pose 0.10.21 supplies 33 landmarks. The pipeline selects the kicking-s
 
 ### DeepLabCut
 
-The thesis benchmark used one participant-level training/validation split, one exploratory run per configuration, 3,181 labels, and eight bilateral points. Training labels were sampled every four frames from 240 Hz recordings; this is the training-set annotation interval, not the inference or analysis frame rate. The ten frames immediately before impact belong to the strict 3D evaluation subset and are a different sampling decision.
+The study's exploratory model-selection analysis used one participant-level training/validation split and one run per configuration, with 3,181 labels and eight bilateral points. Training labels were sampled every four frames from 240 Hz recordings; this is the training-set annotation interval, not the inference or analysis frame rate. The ten frames immediately before impact belong to the strict 3D evaluation subset and are a different sampling decision.
 
 | Model | Selected epoch | Selection-validation RMSE (px) | RMSE at p-cutoff (px) |
 | --- | ---: | ---: | ---: |
@@ -136,7 +140,7 @@ The thesis benchmark used one participant-level training/validation split, one e
 | RTMPose-M | 28 | 15.54 | 14.58 |
 | RTMPose-X | 4 | 15.62 | 15.83 |
 
-These are single-run results on the study’s selection partition. ResNet-101 was selected for the integrated analysis using the thesis criterion; the benchmark does not establish a general architecture ranking. The configurations, checkpoint identifiers, hashes and inference settings are recorded in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md) and the portable YAML files under [`configs/deeplabcut/benchmark`](configs/deeplabcut/benchmark). Trained checkpoint files are not distributed with the repository or its Releases.
+These are single-run results on the study’s selection partition. ResNet-101 was carried into the integrated analysis after selection using validation RMSE at the 0.6 confidence cutoff. The five-configuration comparison documents this study-specific model-selection step; it does not estimate performance in unseen participants. The configurations, checkpoint identifiers, hashes and inference settings are recorded in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md) and the portable YAML files under [`configs/deeplabcut/benchmark`](configs/deeplabcut/benchmark). Trained checkpoint files are not distributed with the repository or its Releases.
 
 Example inference with a compatible model bundle already available on the local computer:
 
