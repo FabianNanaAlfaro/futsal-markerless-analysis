@@ -8,7 +8,7 @@ The analysis covers 13 players, 78 kicks (39 per kicking side), 39 bilateral pai
 
 ## Data
 
-The input CSV files are available in [`data/plos-one-78`](../../../data/plos-one-78/README.md). The release covers 13 players, 78 kicks (39 per kicking side), 39 bilateral pairs, and 156 camera views. It includes coded three-dimensional trajectories for manual reference tracking, Sports2D, MediaPipe Pose, and DeepLabCut (ResNet-101), together with the derived analysis tables used in the article and Supporting Information. Source videos, extracted frames, the participant-code key, camera-calibration files, and trained pose-model checkpoints are not distributed.
+The input CSV files are available in [`data/plos-one-78`](../../data/plos-one-78/README.md). The release covers 13 players, 78 kicks (39 per kicking side), 39 bilateral pairs, and 156 camera views. It includes coded three-dimensional trajectories for manual reference tracking, Sports2D, MediaPipe Pose, and DeepLabCut (ResNet-101), together with the derived analysis tables used in the article and Supporting Information. Source videos, extracted frames, the participant-code key, camera-calibration files, and trained pose-model checkpoints are not distributed.
 
 ## Environment
 
