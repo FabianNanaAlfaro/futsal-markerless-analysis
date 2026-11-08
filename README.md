@@ -15,7 +15,7 @@ A Python package and command-line tool for lower-limb pose processing and futsal
 
 ## Study scope and acquisition
 
-The study examines whether three markerless pose-estimation routes can be applied to three-dimensional lower-limb analysis during the rapid futsal instep kick, and quantifies their outcome-specific agreement and limitations relative to manual tracking. The source corpus includes 13 professional players, 78 kicks (39 per side), and 156 analyzed camera views from a four-camera setup. Recordings were acquired at 240 Hz and 848 × 480 pixels. This low spatial resolution makes landmark localization demanding during a rapid movement, particularly for distal points such as the foot.
+The study compares the outcome-specific agreement and limitations of Sports2D, MediaPipe Pose, and DeepLabCut relative to manual reference tracking during three-dimensional analysis of the rapid futsal instep kick. The source corpus includes 13 professional players, 78 kicks (39 per side), and 156 analyzed camera views from a four-camera setup. Recordings were acquired at 240 Hz and 848 × 480 pixels. This low spatial resolution makes landmark localization demanding during a rapid movement, particularly for distal points such as the foot.
 
 ## Capabilities
 
@@ -130,17 +130,7 @@ MediaPipe Pose 0.10.21 supplies 33 landmarks. The pipeline selects the kicking-s
 
 ### DeepLabCut
 
-The study's exploratory model-selection analysis used one participant-level training/validation split and one run per configuration, with 3,181 labels and eight bilateral points. Training labels were sampled every four frames from 240 Hz recordings; this is the training-set annotation interval, not the inference or analysis frame rate. The ten frames immediately before impact belong to the strict 3D evaluation subset and are a different sampling decision.
-
-| Model | Selected epoch | Selection-validation RMSE (px) | RMSE at p-cutoff (px) |
-| --- | ---: | ---: | ---: |
-| ResNet-101 | 25 | 12.55 | 12.25 |
-| HRNet-W48 | 35 | 12.49 | 12.26 |
-| RTMPose-S | 15 | 13.82 | 13.64 |
-| RTMPose-M | 28 | 15.54 | 14.58 |
-| RTMPose-X | 4 | 15.62 | 15.83 |
-
-These are single-run results on the study’s selection partition. ResNet-101 was carried into the integrated analysis after selection using validation RMSE at the 0.6 confidence cutoff. The five-configuration comparison documents this study-specific model-selection step; it does not estimate performance in unseen participants. The configurations, checkpoint identifiers, hashes and inference settings are recorded in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md) and the portable YAML files under [`configs/deeplabcut/benchmark`](configs/deeplabcut/benchmark). Trained checkpoint files are not distributed with the repository or its Releases.
+An exploratory model-selection step evaluated ResNet-101, HRNet-W48, RTMPose-S, RTMPose-M, and RTMPose-X using one participant-level training/validation split and one run per configuration. The study used 3,181 annotations across eight bilateral landmarks, sampled every fourth frame from the 240-Hz recordings. ResNet-101 was selected for the integrated analysis using validation RMSE at the 0.6 confidence cutoff. Full model-selection metrics and metadata are available in [`docs/deeplabcut-benchmark.md`](docs/deeplabcut-benchmark.md). The training-frame interval describes annotation sampling, not inference cadence. Trained checkpoints are not publicly distributed.
 
 Example inference with a compatible model bundle already available on the local computer:
 
