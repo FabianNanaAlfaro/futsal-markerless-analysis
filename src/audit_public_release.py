@@ -20,6 +20,30 @@ FORBIDDEN_SUFFIXES = {
     ".docx", ".pptx",
 }
 FORBIDDEN_NAME_PARTS = ("proof", "database", "calibration", "weights", "checkpoint")
+PUBLIC_CSV_ALLOWLIST = {
+    "data/plos-one-78/data/tracking_3d_long.csv",
+    "data/plos-one-78/data/trial_manifest.csv",
+    "data/plos-one-78/derived/benchmark_5_modelos_oficial.csv",
+    "data/plos-one-78/derived/bilateral_outcomes_summary_78.csv",
+    "data/plos-one-78/derived/bland_altman_medidas_repetidas.csv",
+    "data/plos-one-78/derived/bland_altman_variables_especificas.csv",
+    "data/plos-one-78/derived/cobertura_por_ensayo_y_sistema.csv",
+    "data/plos-one-78/derived/cobertura_resumen.csv",
+    "data/plos-one-78/derived/curvas_angulos_corpus78.csv",
+    "data/plos-one-78/derived/curvas_posicion_corpus78.csv",
+    "data/plos-one-78/derived/curvas_velocidad_angular_corpus78.csv",
+    "data/plos-one-78/derived/curvas_velocidad_corpus78.csv",
+    "data/plos-one-78/derived/error_3d_detallado_available_case.csv",
+    "data/plos-one-78/derived/error_3d_por_articulacion_common_case.csv",
+    "data/plos-one-78/derived/error_3d_strict_common_detail.csv",
+    "data/plos-one-78/derived/metricas_forma_temporal.csv",
+    "data/plos-one-78/derived/metricas_temporales_picos.csv",
+    "data/plos-one-78/derived/resumen_error_3d_common_case.csv",
+    "data/plos-one-78/derived/spatial_error_per_trial_78.csv",
+    "data/plos-one-78/derived/spatial_error_summary_78.csv",
+    "data/plos-one-78/derived/spm_bilateral_78.csv",
+    "data/plos-one-78/derived/spm_multiplicidad.csv",
+}
 PRIVATE_PATH = re.compile(r"(?i)(?:\b[a-z]:[\\/]|/users/|/home/|/mnt/)")
 EMAIL = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 SECRET = re.compile(r"(?i)\b(?:ghp|github_pat|sk)-[A-Za-z0-9_-]{12,}\b")
@@ -49,7 +73,8 @@ def main(argv):
     findings = []
     for path, rel in iter_files(root):
         lower = rel.lower()
-        if path.suffix.lower() in FORBIDDEN_SUFFIXES:
+        csv_is_approved = path.suffix.lower() == ".csv" and rel in PUBLIC_CSV_ALLOWLIST
+        if path.suffix.lower() in FORBIDDEN_SUFFIXES and not csv_is_approved:
             findings.append("forbidden artifact type: {}".format(rel))
         if any(part in lower for part in FORBIDDEN_NAME_PARTS):
             findings.append("forbidden artifact name: {}".format(rel))
