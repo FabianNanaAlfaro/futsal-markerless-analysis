@@ -1,0 +1,6 @@
+model_key,label,family,net_type,shuffle,epoch,train_rmse_px,train_rmse_pcutoff_px,test_rmse_px,test_rmse_pcutoff_px,test_mAP,test_mAR,detector_epoch,selected_by,heldout_role,selection_participant_codes,rank_rmse_pcutoff
+resnet_101,ResNet-101,ResNet,top_down_resnet_101,105,25,2.31000000,2.18000000,12.55000000,12.25000000,84.88000000,90.75000000,20,minimum test_rmse_pcutoff_px,validation_selection_set,,1
+hrnet_w48,HRNet-W48,HRNet,top_down_hrnet_w48,104,35,2.22000000,2.16000000,12.49000000,12.26000000,86.75000000,90.91000000,20,minimum test_rmse_pcutoff_px,validation_selection_set,,2
+rtmpose_s,RTMPose-S,RTMPose,rtmpose_s,101,15,4.08000000,4.08000000,13.82000000,13.64000000,77.40000000,85.93000000,20,minimum test_rmse_pcutoff_px,validation_selection_set,,3
+rtmpose_m,RTMPose-M,RTMPose,rtmpose_m,102,28,5.54000000,5.31000000,15.54000000,14.58000000,66.23000000,76.00000000,20,minimum test_rmse_pcutoff_px,validation_selection_set,,4
+rtmpose_x,RTMPose-X,RTMPose,rtmpose_x,103,4,6.87000000,6.92000000,15.62000000,15.83000000,61.29000000,75.06000000,20,minimum test_rmse_pcutoff_px,validation_selection_set,,5

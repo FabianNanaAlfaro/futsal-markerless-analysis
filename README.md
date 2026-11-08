@@ -186,7 +186,7 @@ The package code is MIT licensed; its copyright notice is in [`LICENSE`](LICENSE
 
 ## Reproducing the PLOS ONE analysis
 
-The scripts for rebuilding data-derived Figures 2–5 and the repeated-measures Bland–Altman summary are in [`paper-reproduction/plos-one-78`](paper-reproduction/plos-one-78/README.md). They operate on processed analysis tables. Coded participant-level trajectories and derived tables are not hosted publicly because movement profiles from this small professional cohort may permit indirect identification; the manuscript gives the institutional access route. The repository does not contain videos, camera-calibration records, or trained pose-model checkpoints.
+The processed three-dimensional trajectories and analysis tables for the 78-kick study are available in [`data/plos-one-78`](data/plos-one-78/README.md). The release includes manual reference tracking and the Sports2D, MediaPipe Pose, and DeepLabCut (ResNet-101) outputs. It contains no source videos, extracted frames, participant-code key, camera-calibration files, or trained pose-model checkpoints. Use the scripts in [`paper-reproduction/plos-one-78`](paper-reproduction/plos-one-78/README.md) to rebuild Figures 2–5 and the repeated-measures Bland–Altman table.
 ## Documentation and references
 
 - [Processing workflow](docs/pipeline.md)

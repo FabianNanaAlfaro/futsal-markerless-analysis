@@ -1,0 +1,5 @@
+system,ensayos,cobertura_media_pct,cobertura_mediana_pct,ensayos_100_pct,ensayos_con_alguna_salida
+DeepLabCut (ResNet-101),78,100.00000000,100.00000000,78,78
+MediaPipe Pose,78,100.00000000,100.00000000,78,78
+Manual reference,78,100.00000000,100.00000000,78,78
+Sports2D,78,97.79202279,100.00000000,72,78

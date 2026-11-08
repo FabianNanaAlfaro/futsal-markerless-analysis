@@ -190,7 +190,7 @@ def main() -> None:
     manifest = {
         "analysis_corpus": {"participants": 13, "kicks": 78, "kicks_per_side": 39, "bilateral_pairs": 39},
         "figure_generation": "Figures 2–5 are generated from the 78-kick spatial, sagittal-curve, bilateral, and trial-level agreement tables. Knee and ankle angles in the Bland–Altman source use the signed study convention.",
-        "fixed_workflow_schematic": ({"file": "figures_submission/Fig1.tif", "sha256": sha256(fixed_fig1)} if fixed_fig1.is_file() else None),
+        "fixed_workflow_schematic": ({"file": "paper-reproduction/plos-one-78/assets/Fig1.tif", "sha256": sha256(fixed_fig1)} if fixed_fig1.is_file() else None),
         "inputs": [{"file": p.name, "sha256": sha256(p)} for p in sources],
         "main_figures": [{"file": p.name, "sha256": sha256(p)} for p in sorted(args.out.glob("figure*.pdf"))],
         "supplementary_figures": [p.name for p in sorted((PROJECT / "figures" / "supplementary").glob("supplementary_figure*.pdf"))],

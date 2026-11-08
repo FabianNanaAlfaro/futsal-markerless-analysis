@@ -1,0 +1,33 @@
+family,outcome,comparison,n_participants,n_kicks,n_pairs,h0_reject,min_cluster_p,cluster_json,f_min,f_max,t_min,t_max,holm_p,bh_p,reject_holm,reject_bh
+global omnibus (8 outcomes),SI Hip speed,Omnibus: four systems,13,78,39,False,1.00000000,[],0.64935497,4.79909519,,,1.00000000,1.00000000,False,False
+speed-index,SI Hip speed,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,0.45641342,2.34529429,1.00000000,1.00000000,False,False
+speed-index,SI Hip speed,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,0.05784165,2.02593654,1.00000000,1.00000000,False,False
+speed-index,SI Hip speed,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.63636269,-0.79233245,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),SI Knee speed,Omnibus: four systems,13,78,39,True,0.02324930,"[{""start_pct"": 70.67901827663316, ""end_pct"": 81.6711770089278, ""p"": 0.023249295718770546}]",0.76159292,6.32714868,,,0.18599437,0.18599437,False,False
+speed-index,SI Knee speed,Manual reference vs Sports2D,13,78,39,True,0.03796688,"[{""start_pct"": 73.62735647279948, ""end_pct"": 86.15587955015971, ""p"": 0.03796687851634406}]",,,-3.52610445,-0.88349211,0.45560254,0.45560254,False,False
+speed-index,SI Knee speed,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-0.23215680,1.76024028,1.00000000,1.00000000,False,False
+speed-index,SI Knee speed,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.89916301,-0.52885271,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),SI Ankle speed,Omnibus: four systems,13,78,39,False,1.00000000,[],0.34891796,4.31730427,,,1.00000000,1.00000000,False,False
+speed-index,SI Ankle speed,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-1.19433095,1.18478201,1.00000000,1.00000000,False,False
+speed-index,SI Ankle speed,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-1.16887676,2.87205851,1.00000000,1.00000000,False,False
+speed-index,SI Ankle speed,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-0.08269002,1.58863575,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),SI Foot speed,Omnibus: four systems,13,78,39,False,1.00000000,[],0.09671687,3.99096151,,,1.00000000,1.00000000,False,False
+speed-index,SI Foot speed,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-1.30597594,1.28922575,1.00000000,1.00000000,False,False
+speed-index,SI Foot speed,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-1.90089377,1.53307618,1.00000000,1.00000000,False,False
+speed-index,SI Foot speed,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-2.89257265,1.08756032,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),Angle difference Knee,Omnibus: four systems,13,78,39,False,1.00000000,[],0.02496953,2.44572519,,,1.00000000,1.00000000,False,False
+angle,Angle difference Knee,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-1.17870160,1.01998678,1.00000000,1.00000000,False,False
+angle,Angle difference Knee,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-1.07897879,1.77145461,1.00000000,1.00000000,False,False
+angle,Angle difference Knee,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.35489671,0.31739347,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),Angle difference Ankle,Omnibus: four systems,13,78,39,False,1.00000000,[],0.26203875,2.93406444,,,1.00000000,1.00000000,False,False
+angle,Angle difference Ankle,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-2.55367904,-0.02094635,1.00000000,1.00000000,False,False
+angle,Angle difference Ankle,Manual reference vs MediaPipe,13,78,39,True,0.04862072,"[{""start_pct"": 65.38873507642246, ""end_pct"": 68.03415719822239, ""p"": 0.0486207236644447}, {""start_pct"": 82.40164831215381, ""end_pct"": 83.3274077253957, ""p"": 0.049829035379565845}, {""start_pct"": 84.47202062608295, ""end_pct"": 85.5943594182402, ""p"": 0.049748919344607234}]",,,-3.50196000,0.76435487,0.29172434,0.29172434,False,False
+angle,Angle difference Ankle,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.90422892,0.03104365,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),Angular velocity difference Knee,Omnibus: four systems,13,78,39,False,1.00000000,[],0.15852909,3.85173632,,,1.00000000,1.00000000,False,False
+angular-velocity,Angular velocity difference Knee,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-2.59642935,-0.57399866,1.00000000,1.00000000,False,False
+angular-velocity,Angular velocity difference Knee,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-2.63232043,-0.42349536,1.00000000,1.00000000,False,False
+angular-velocity,Angular velocity difference Knee,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.98774474,0.12521746,1.00000000,1.00000000,False,False
+global omnibus (8 outcomes),Angular velocity difference Ankle,Omnibus: four systems,13,78,39,True,0.04999823,"[{""start_pct"": 34.960265092540624, ""end_pct"": 35.028425049545184, ""p"": 0.04999822777608065}]",0.70179269,5.13284399,,,0.34998759,0.19999291,False,False
+angular-velocity,Angular velocity difference Ankle,Manual reference vs Sports2D,13,78,39,False,1.00000000,[],,,-0.08402783,1.86267543,1.00000000,1.00000000,False,False
+angular-velocity,Angular velocity difference Ankle,Manual reference vs MediaPipe,13,78,39,False,1.00000000,[],,,-2.35383169,1.28600980,1.00000000,1.00000000,False,False
+angular-velocity,Angular velocity difference Ankle,Manual reference vs DeepLabCut,13,78,39,False,1.00000000,[],,,-1.88777618,0.02878378,1.00000000,1.00000000,False,False

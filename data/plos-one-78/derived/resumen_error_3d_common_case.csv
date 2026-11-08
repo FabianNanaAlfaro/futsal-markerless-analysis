@@ -1,0 +1,4 @@
+system,ensayos_common_case,puntos_frame_articulacion,mediana_error_m,mae_m,rmse_m,p95_m,mediana_de_medianas_por_ensayo_m,IC95_bootstrap_mediana_ensayo_lo,IC95_bootstrap_mediana_ensayo_hi,nota
+Sports2D,78,3368,0.15369445,0.19621852,0.24831512,0.52026639,0.15729876,0.14551987,0.17046392,La distribución frame-articulación es descriptiva; la incertidumbre se estima sobre medianas por ensayo.
+MediaPipe Pose,78,3406,0.27572859,0.35240578,0.42288718,0.82150045,0.28010941,0.25416980,0.31379874,La distribución frame-articulación es descriptiva; la incertidumbre se estima sobre medianas por ensayo.
+DeepLabCut (ResNet-101),78,3380,0.16990171,0.17578448,0.19561156,0.31783977,0.17140820,0.14758600,0.18921100,La distribución frame-articulación es descriptiva; la incertidumbre se estima sobre medianas por ensayo.

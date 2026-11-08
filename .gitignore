@@ -1,4 +1,5 @@
-# Public-release perimeter: source data and local research artifacts never enter Git.
+# Raw research data and local artifacts stay ignored; the reviewed PLOS dataset
+# release below is the sole data-directory exception.
 data/
 private/
 raw/
@@ -63,3 +64,15 @@ work/
 build/
 dist/
 .venv-*/
+
+# Approved derived-data release for the PLOS ONE article.
+!data/
+!data/plos-one-78/
+!data/plos-one-78/data/
+!data/plos-one-78/derived/
+!data/plos-one-78/README.md
+!data/plos-one-78/DATA_DICTIONARY.md
+!data/plos-one-78/LICENSE.md
+!data/plos-one-78/SHA256SUMS.txt
+!data/plos-one-78/data/*.csv
+!data/plos-one-78/derived/*.csv

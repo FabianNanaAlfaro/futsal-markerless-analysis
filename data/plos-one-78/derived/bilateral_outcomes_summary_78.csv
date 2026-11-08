@@ -1,0 +1,25 @@
+outcome,system,n_kicks,n_pairs,n_participants,participants_with_curve,MAE_median_participant,RMSE_median_participant,CCC_group_median_curves,n_phase_points_group
+SI Hip speed,Sports2D,78,39,13,13,16.31407818,19.51038234,-0.16622349,101
+SI Hip speed,MediaPipe Pose,78,39,13,13,32.36604992,41.77586098,0.17786439,101
+SI Hip speed,DeepLabCut (ResNet-101),78,39,13,13,13.90427781,15.31330416,0.20295659,101
+SI Knee speed,Sports2D,78,39,13,13,27.57876152,30.02052595,-0.06128629,101
+SI Knee speed,MediaPipe Pose,78,39,13,13,28.16951940,34.63561286,-0.05393118,101
+SI Knee speed,DeepLabCut (ResNet-101),78,39,13,13,15.05266022,17.61295750,0.01019728,101
+SI Ankle speed,Sports2D,78,39,13,13,18.51431136,20.34959141,-0.17490837,101
+SI Ankle speed,MediaPipe Pose,78,39,13,13,32.52337312,40.58656921,0.02324115,101
+SI Ankle speed,DeepLabCut (ResNet-101),78,39,13,13,6.98651241,8.04426230,-0.21892446,101
+SI Foot speed,Sports2D,78,39,13,13,19.27978557,23.80795391,0.02944007,101
+SI Foot speed,MediaPipe Pose,78,39,13,13,33.24291981,38.61598847,0.04637905,101
+SI Foot speed,DeepLabCut (ResNet-101),78,39,13,13,8.90157628,10.21942569,0.02306918,101
+Angle difference Knee,Sports2D,78,39,13,13,9.19859234,11.07987901,-0.17253596,101
+Angle difference Knee,MediaPipe Pose,78,39,13,13,17.23687655,18.85669636,-0.21039017,101
+Angle difference Knee,DeepLabCut (ResNet-101),78,39,13,13,6.55757604,6.87906353,0.38066520,101
+Angle difference Ankle,Sports2D,78,39,13,13,36.07460563,41.65921588,0.01991293,101
+Angle difference Ankle,MediaPipe Pose,78,39,13,13,21.63157625,24.78487068,0.04695234,101
+Angle difference Ankle,DeepLabCut (ResNet-101),78,39,13,13,14.13850319,15.66723074,0.08085166,101
+Angular velocity difference Knee,Sports2D,78,39,13,13,438.45637410,485.30546002,0.01650238,101
+Angular velocity difference Knee,MediaPipe Pose,78,39,13,13,720.05262862,921.67356595,-0.03027211,101
+Angular velocity difference Knee,DeepLabCut (ResNet-101),78,39,13,13,152.64074227,168.11338249,-0.06053768,101
+Angular velocity difference Ankle,Sports2D,78,39,13,13,1017.78424783,1261.76831566,0.03635100,101
+Angular velocity difference Ankle,MediaPipe Pose,78,39,13,13,1699.08271447,1735.25023316,0.09743443,101
+Angular velocity difference Ankle,DeepLabCut (ResNet-101),78,39,13,13,348.22965513,399.88612624,0.02031503,101
