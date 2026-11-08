@@ -1,0 +1,54 @@
+{
+  "analysis_corpus": {
+    "participants": 13,
+    "kicks": 78,
+    "kicks_per_side": 39,
+    "bilateral_pairs": 39
+  },
+  "figure_generation": "Figures 2\u20135 are generated from the 78-kick spatial, sagittal-curve, bilateral, and trial-level agreement tables. Knee and ankle angles in the Bland\u2013Altman source use the signed study convention.",
+  "fixed_workflow_schematic": {
+    "file": "figures_submission/Fig1.tif",
+    "sha256": "36f7252b4672ff214a7f85b7b18f555b63f555755963edffd2a8c071f3971505"
+  },
+  "inputs": [
+    {
+      "file": "spatial_error_per_trial_78.csv",
+      "sha256": "014c7b1da295fc3eabce6914ce778d1dd97fb07b999af32ca25ff56584a03652"
+    },
+    {
+      "file": "curvas_angulos_corpus78.csv",
+      "sha256": "defbf6c1aca8cddabdc019c7918fffcfb0c3a747c68ce9cf4f752962adeba8a7"
+    },
+    {
+      "file": "curvas_velocidad_angular_corpus78.csv",
+      "sha256": "1cc71f7ec12bb94c8c32e76e7164e9b195291072b259f835bdd184a1cc91a4cf"
+    },
+    {
+      "file": "bilateral_outcomes_summary_78.csv",
+      "sha256": "c73d35b7b85be05d31d5a52e4189a082ff4fabd244e2102f67553ad69eee506e"
+    },
+    {
+      "file": "bland_altman_variables_especificas.csv",
+      "sha256": "009526ac9d52a22efc2613d91ab423cedaab52380c3745a96161b94c3896bd9e"
+    }
+  ],
+  "main_figures": [
+    {
+      "file": "figure2_spatial_error.pdf",
+      "sha256": "72a3a6d238f380a1862095730b7bfb31e6d0de18dec03fe583cb14da3b61a9df"
+    },
+    {
+      "file": "figure3_sagittal_kinematics.pdf",
+      "sha256": "2c1b69e096a26bfe0a809a41bf04f288c5a2e138843aab210f37da65c37e9e9c"
+    },
+    {
+      "file": "figure4_bilateral_errors.pdf",
+      "sha256": "c77430cab5c0182f2cb8102ef6ad4b04254ce9ad75e1a3a388b00e06f118b173"
+    },
+    {
+      "file": "figure5_bland_altman.pdf",
+      "sha256": "05d27f035a8e98bd5aaa0c8e92fc72c45aad98c5e44d0a89a8bfcdc2558ea420"
+    }
+  ],
+  "supplementary_figures": []
+}

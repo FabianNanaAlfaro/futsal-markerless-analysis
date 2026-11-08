@@ -184,6 +184,9 @@ Use the software citation in [`CITATION.md`](CITATION.md) or [`CITATION.cff`](CI
 
 The package code is MIT licensed; its copyright notice is in [`LICENSE`](LICENSE). TeHealP@PUCP is identified as the developing laboratory, separately from the software authors and copyright statement. See [`NOTICE.md`](NOTICE.md) for third-party software and institutional-mark terms.
 
+## Reproducing the PLOS ONE analysis
+
+The scripts for rebuilding data-derived Figures 2–5 and the repeated-measures Bland–Altman summary are in [`paper-reproduction/plos-one-78`](paper-reproduction/plos-one-78/README.md). They operate on processed analysis tables. Coded participant-level trajectories and derived tables are not hosted publicly because movement profiles from this small professional cohort may permit indirect identification; the manuscript gives the institutional access route. The repository does not contain videos, camera-calibration records, or trained pose-model checkpoints.
 ## Documentation and references
 
 - [Processing workflow](docs/pipeline.md)
