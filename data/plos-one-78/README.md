@@ -13,6 +13,8 @@ The dataset covers 13 professional futsal players, 78 kicks (39 from each kickin
 - `data/tracking_3d_long.csv` — frame-level three-dimensional coordinates in metres for the four tracking routes.
 - `data/trial_manifest.csv` — one coded record per kick, linking kicking side and bilateral pair and summarizing available reconstructed landmark-frame records.
 - `derived/` — trial-level spatial errors, kinematic curves, temporal metrics, bilateral outcomes, SPM results, and repeated-measures Bland–Altman inputs and summaries used in the article and Supporting Information.
+- `derived/S1_Data_temporal_coverage.csv` — common analysis-window boundaries and finite reconstructed-coordinate counts for each of the 78 kicks.
+- `derived/S2_Data_MP_knee_velocity_by_trial.csv` — per-kick peak absolute MediaPipe Pose knee angular velocity on the normalized 101-point window curve, its normalized phase, and finite phase-point count.
 - `DATA_DICTIONARY.md` — variable definitions and file-level descriptions.
 - `LICENSE.md` — dataset reuse terms.
 - `SHA256SUMS.txt` — checksums for the distributed CSV files.
@@ -39,6 +41,8 @@ python paper-reproduction\plos-one-78\rebuild_all78_article_figures.py `
 ```
 
 The script regenerates Figures 2–5 and the spatial-error and repeated-measures Bland–Altman tables. Figure 1 is a fixed workflow schematic in `paper-reproduction/plos-one-78/assets/`. The input tables are processed outputs; this release does not rerun pose-estimation inference, video synchronization, camera calibration, or DLT reconstruction from recordings.
+
+Commands for rebuilding S1 Data and S2 Data from the released trajectories are provided in the [article reproduction guide](../../paper-reproduction/plos-one-78/README.md).
 
 Validate the trial coverage and CSV checksums from the repository root with:
 

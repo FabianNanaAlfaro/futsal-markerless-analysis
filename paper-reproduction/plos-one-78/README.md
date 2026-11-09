@@ -38,6 +38,24 @@ python paper-reproduction\plos-one-78\rebuild_all78_article_figures.py `
 
 The script checks the corpus counts, system labels, bilateral pairing, 101-point curve structure, and complete 78-kick coverage required by the reported summaries. Participant-cluster bootstrap resampling uses a fixed seed. Figure 1 is supplied as a fixed workflow schematic.
 
+## Rebuild the S1 and S2 supplementary tables
+
+Run these commands from the repository root after installing the pinned dependencies:
+
+```powershell
+python paper-reproduction\plos-one-78\build_temporal_coverage.py `
+  --tracking data\plos-one-78\data\tracking_3d_long.csv `
+  --output data\plos-one-78\derived\S1_Data_temporal_coverage.csv
+
+python paper-reproduction\plos-one-78\diagnose_mp_knee_velocity_all_trials.py `
+  --tracking data\plos-one-78\data\tracking_3d_long.csv `
+  --coverage data\plos-one-78\derived\S1_Data_temporal_coverage.csv `
+  --output data\plos-one-78\derived\S2_Data_MP_knee_velocity_by_trial.csv `
+  --reference-metrics data\plos-one-78\derived\metricas_temporales_picos.csv
+```
+
+S1 Data records the shared manual-reference window boundaries and finite-coordinate counts. S2 Data reports one peak absolute knee angular velocity per kick from the normalized 101-point window curve. The scripts enforce the 78-kick corpus and 39 kicks per side. With the reference-metrics file, the second script checks all 78 values against the released peak table to a tolerance of (10^{-6}) deg/s.
+
 Validate the trial coverage and CSV checksums from the repository root with:
 
 ```powershell

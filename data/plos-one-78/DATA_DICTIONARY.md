@@ -38,6 +38,8 @@ Files in `derived/` provide the article analysis inputs and reported results:
 - Statistical parametric mapping results and multiplicity-adjustment records.
 - Trial-level inputs and summaries for repeated-measures Bland–Altman analyses.
 - The five-configuration DeepLabCut benchmark table reported in the Supporting Information.
+- `derived/S1_Data_temporal_coverage.csv` — common analysis-window start and end frames, with finite reconstructed-coordinate counts by route and landmark for each kick.
+- `derived/S2_Data_MP_knee_velocity_by_trial.csv` — one MediaPipe Pose knee angular-velocity peak (deg/s) per kick, its normalized phase, and the number of finite points on the 101-point curve.
 
 Column names, units, and analysis conventions are retained in each CSV. Missing coordinates remain missing; they have not been imputed.
 
